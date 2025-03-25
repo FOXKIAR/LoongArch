@@ -8,15 +8,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result<T> {
-    private String msg;
+    private Message msg;
     private T data;
 
     public static <T> Result<T> success(T data) {
-        return new Result<>("成功", data);
+        return new Result<>(Message.SUCCESS, data);
     }
 
-    public static <T> Result<T> message(String msg) {
+    public static <T> Result<T> message(Message msg) {
         return new Result<>(msg, null);
+    }
+
+    public enum Message {
+        SUCCESS,
+        INCORRECT_USERNAME_OR_PASSWORD,
+        PARAMETET_FORMAT_ERROR,
+        INTERNAL_SERVER_ERROR,
     }
 }
 

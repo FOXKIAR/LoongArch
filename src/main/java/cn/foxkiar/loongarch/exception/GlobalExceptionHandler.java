@@ -19,12 +19,12 @@ import static cn.foxkiar.loongarch.util.Result.message;
 public class GlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMediaTypeException.class, HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<Result<Exception>> requestFormatError() {
-        return ResponseEntity.badRequest().body(message("请求格式错误"));
+        return ResponseEntity.badRequest().body(message(Result.Message.PARAMETET_FORMAT_ERROR));
     }
 
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<Result<Exception>> databaseConnectError(SQLException e) {
         log.error(e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message("服务器内部错误，请联系管理员"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message(Result.Message.INTERNAL_SERVER_ERROR));
     }
 }

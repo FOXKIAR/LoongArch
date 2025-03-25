@@ -31,7 +31,7 @@ public class UserController {
         user.setPassword(Base.encoder(user.getPassword()));
         if (isNull(user = userService.getUser(user)))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
-                    body(message("用户名或密码错误"));
+                    body(message(Result.Message.INCORRECT_USERNAME_OR_PASSWORD));
         session.setAttribute("PERMISSION", user.getPermission());
         return ResponseEntity.ok(success(user));
     }
