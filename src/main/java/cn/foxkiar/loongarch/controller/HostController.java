@@ -1,0 +1,56 @@
+package cn.foxkiar.loongarch.controller;
+
+import cn.foxkiar.loongarch.entity.HostInfo;
+import cn.foxkiar.loongarch.entity.HostStatus;
+import cn.foxkiar.loongarch.util.Result;
+import cn.hutool.system.OsInfo;
+import cn.hutool.system.SystemUtil;
+import cn.hutool.system.oshi.CpuInfo;
+import cn.hutool.system.oshi.OshiUtil;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import oshi.hardware.GlobalMemory;
+import oshi.hardware.GraphicsCard;
+
+import java.util.Date;
+import java.util.stream.Collectors;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/host")
+public class HostController {
+    @GetMapping("/info")
+    public ResponseEntity<Result<HostInfo>> getHostInfo() {
+        HostInfo hostInfo = new HostInfo();
+        // 获取 cpuModel 中的第一行
+        hostInfo.setCpu(OshiUtil.getCpuInfo().getCpuModel().split("\n")[0]);
+        OsInfo osInfo = SystemUtil.getOsInfo();
+        hostInfo.setSystem(osInfo.getName() + " " + osInfo.getArch() + " " + osInfo.getVersion());
+        hostInfo.setHostname(SystemUtil.getHostInfo().getName());
+        hostInfo.setGpu(OshiUtil.getHardware().getGraphicsCards().stream().
+                // 根据 GraphicsCard 对象的 name 成员变量重新生成 List
+                map(GraphicsCard::getName).collect(Collectors.toList()).toString());
+        long uptimeSeconds = OshiUtil.getOs().getSystemUptime();
+        hostInfo.setStartTime(new Date(System.currentTimeMillis() - uptimeSeconds * 1000));
+        hostInfo.setUptime(uptimeSeconds);
+        return ResponseEntity.ok(Result.success(hostInfo));
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<Result<HostStatus>> getHostStatus() {
+        HostStatus hostStatus = new HostStatus();
+        HostStatus.Cpu cpu = new HostStatus.Cpu();
+        CpuInfo cpuInfo = OshiUtil.getCpuInfo();
+        cpu.setTotal(cpuInfo.getToTal());
+        cpu.setFree(cpuInfo.getFree());
+        cpu.setUsed(cpuInfo.getUsed());
+        hostStatus.setCpu(cpu);
+        HostStatus.Memory memory = new HostStatus.Memory();
+        GlobalMemory globalMemory = OshiUtil.getMemory();
+        memory.setTotal(globalMemory.getTotal());
+        return ResponseEntity.ok(Result.success(hostStatus));
+    }
+}
