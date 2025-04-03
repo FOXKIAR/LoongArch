@@ -2,9 +2,9 @@ package cn.foxkiar.loongarch.controller;
 
 import cn.foxkiar.loongarch.entity.User;
 import cn.foxkiar.loongarch.service.UserService;
-import cn.foxkiar.loongarch.util.Base;
 import cn.foxkiar.loongarch.util.Result;
 import cn.foxkiar.loongarch.util.ValidatedList;
+import cn.hutool.core.codec.Base64;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Result<User>> login(@RequestBody @Validated User user, HttpSession session) {
-        user.setPassword(Base.encoder(user.getPassword()));
+        user.setPassword(Base64.encode(user.getPassword()));
         if (isNull(user = userService.getUser(user)))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
                     body(message(Result.Message.INCORRECT_USERNAME_OR_PASSWORD));
@@ -39,7 +39,7 @@ public class UserController {
     @PutMapping("/append")
     public ResponseEntity<Result<User>> append(@RequestBody @Validated ValidatedList<User> users) {
         for (User user : users.getData()) {
-            user.setPassword(Base.encoder(user.getPassword()));
+            user.setPassword(Base64.encode(user.getPassword()));
             userService.insertUser(user);
         }
         return ResponseEntity.ok(success(null));
