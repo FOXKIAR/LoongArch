@@ -13,22 +13,22 @@ public class HostStatus {
     @Data
     public static class Memory {
         private Long total;
-        private Double used;
-        private Double free;
+        private Long used;
+        private Long free;
     }
     @Data
-    class Disk {
-        private Double total;
-        private Double used;
-        private Double free;
+    public static class Disk {
+        private Long total;
+        private Long used;
+        private Long free;
 
-        private Double read;
-        private Double write;
+        private Long read;
+        private Long write;
     }
     @Data
-    class Network {
-        private Double up;
-        private Double down;
+    public static class Network {
+        private Long up;
+        private Long down;
     }
     private Cpu cpu;
     private Memory memory;
