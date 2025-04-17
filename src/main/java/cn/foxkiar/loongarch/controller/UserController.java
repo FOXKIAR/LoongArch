@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static cn.foxkiar.loongarch.util.Result.message;
 import static cn.foxkiar.loongarch.util.Result.success;
 import static java.util.Objects.isNull;
@@ -34,6 +36,11 @@ public class UserController {
                     body(message(Result.Message.INCORRECT_USERNAME_OR_PASSWORD));
         session.setAttribute("PERMISSION", user.getPermission());
         return ResponseEntity.ok(success(user));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Result<List<User>>> getAll() {
+        return ResponseEntity.ok(Result.success(userService.getUsers()));
     }
 
     @PutMapping("/append")

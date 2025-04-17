@@ -5,6 +5,8 @@ import cn.foxkiar.loongarch.mapper.UserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     final UserMapper userMapper;
@@ -15,6 +17,10 @@ public class UserService {
 
     public User getUser(User user) {
         return userMapper.selectOne(new LambdaQueryWrapper<>(user));
+    }
+
+    public List<User> getUsers() {
+        return userMapper.selectList(null);
     }
 
     public void insertUser(User user) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import oshi.hardware.GraphicsCard;
 import oshi.hardware.HWDiskStore;
+import oshi.hardware.NetworkIF;
 
 import java.util.Date;
 import java.util.List;
@@ -41,5 +42,10 @@ public class HostController {
     @GetMapping("/disk/info")
     public ResponseEntity<Result<List<HWDiskStore>>> getDiskSpace() {
         return ResponseEntity.ok(Result.success(OshiUtil.getDiskStores()));
+    }
+
+    @GetMapping("/network/info")
+    public ResponseEntity<Result<List<NetworkIF>>> getNetwork() {
+        return ResponseEntity.ok(Result.success(OshiUtil.getNetworkIFs()));
     }
 }
