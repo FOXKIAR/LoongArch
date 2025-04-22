@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import oshi.hardware.GlobalMemory;
 import oshi.hardware.GraphicsCard;
 import oshi.hardware.HWDiskStore;
 import oshi.hardware.NetworkIF;
 
+import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,6 +46,25 @@ public class HostController {
     @GetMapping("/disk/info")
     public ResponseEntity<Result<List<HWDiskStore>>> getDiskSpace() {
         return ResponseEntity.ok(Result.success(OshiUtil.getDiskStores()));
+    }
+
+    @GetMapping("/disk/space")
+    public ResponseEntity<Result<Map<String, Long>>> getDisk() {
+        Map<String, Long> data = new HashMap<>();
+        long total = 0, free = 0;
+        for (File root : File.listRoots()) {
+            total += root.getTotalSpace();
+            free += root.getFreeSpace();
+        }
+        data.put("total", total);
+        data.put("free", free);
+        data.put("used", total - free);
+        return ResponseEntity.ok(Result.success(data));
+    }
+
+    @GetMapping("/memory/info")
+    public ResponseEntity<Result<GlobalMemory>> getMemory() {
+        return ResponseEntity.ok(Result.success(OshiUtil.getMemory()));
     }
 
     @GetMapping("/network/info")
