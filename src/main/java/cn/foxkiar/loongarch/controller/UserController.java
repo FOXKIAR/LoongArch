@@ -5,14 +5,14 @@ import cn.foxkiar.loongarch.service.UserService;
 import cn.foxkiar.loongarch.util.Result;
 import cn.foxkiar.loongarch.util.ValidatedList;
 import cn.hutool.core.codec.Base64;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.List;
 
 import static cn.foxkiar.loongarch.util.Result.message;
 import static cn.foxkiar.loongarch.util.Result.success;
@@ -38,17 +38,33 @@ public class UserController {
         return ResponseEntity.ok(success(user));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Result<List<User>>> getAll() {
-        return ResponseEntity.ok(Result.success(userService.getUsers()));
-    }
-
-    @PutMapping("/append")
+    @PostMapping("/append")
     public ResponseEntity<Result<User>> append(@RequestBody @Validated ValidatedList<User> users) {
         for (User user : users.getData()) {
             user.setPassword(Base64.encode(user.getPassword()));
             userService.insertUser(user);
         }
         return ResponseEntity.ok(success(null));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Result<?>> deleteById(@PathVariable Integer id) {
+        return userService.deleteUser(id) != 0 ?
+                ResponseEntity.ok(Result.success(null)) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).
+                        body(Result.message(Result.Message.ID_NOT_FOUND));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Result<User>> update(@RequestBody @Validated User user) {
+        return userService.updateUser(user) != 0 ?
+                ResponseEntity.ok(Result.success(null)) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).
+                        body(Result.message(Result.Message.ID_NOT_FOUND));
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Result<IPage<User>>> page(@RequestParam Page<User> page, @RequestParam @Validated User user) {
+        return ResponseEntity.ok(Result.success(userService.getUserPages(page, user)));
     }
 }

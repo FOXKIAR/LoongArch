@@ -21,6 +21,7 @@ public class Result<T> {
 
     public enum Message {
         SUCCESS,
+        ID_NOT_FOUND,
         INCORRECT_USERNAME_OR_PASSWORD,
         PARAMETET_FORMAT_ERROR,
         INTERNAL_SERVER_ERROR,
