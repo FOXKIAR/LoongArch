@@ -7,6 +7,7 @@ import cn.foxkiar.loongarch.util.ValidatedList;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,7 @@ import static cn.foxkiar.loongarch.util.Result.message;
 import static cn.foxkiar.loongarch.util.Result.success;
 import static java.util.Objects.isNull;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/user")
@@ -64,7 +66,8 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Result<IPage<User>>> page(@RequestParam Page<User> page, @RequestParam @Validated User user) {
+    public ResponseEntity<Result<IPage<User>>> page(@ModelAttribute Page<User> page, @ModelAttribute @Validated User user) {
+        log.info("page: {}, user: {}", page, user);
         return ResponseEntity.ok(Result.success(userService.getUserPages(page, user)));
     }
 }
