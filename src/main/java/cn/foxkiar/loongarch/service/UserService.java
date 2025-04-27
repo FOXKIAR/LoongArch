@@ -32,6 +32,12 @@ public class UserService {
     }
 
     public IPage<User> getUserPages(Page<User> page, User user) {
-        return userMapper.selectPage(page, new LambdaQueryWrapper<>(user));
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        if (user.getName() != null) wrapper.like(User::getName, user.getName());
+        if (user.getAccount() != null) wrapper.like(User::getAccount, user.getAccount());
+        if (user.getPermission() != null) wrapper.eq(User::getPermission, user.getPermission());
+        if (user.getEmail() != null) wrapper.like(User::getEmail, user.getEmail());
+        if (user.getPhone() != null) wrapper.like(User::getPhone, user.getPhone());
+        return userMapper.selectPage(page, wrapper);
     }
 }

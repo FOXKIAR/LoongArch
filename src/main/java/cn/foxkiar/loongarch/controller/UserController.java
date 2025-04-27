@@ -3,7 +3,7 @@ package cn.foxkiar.loongarch.controller;
 import cn.foxkiar.loongarch.entity.User;
 import cn.foxkiar.loongarch.service.UserService;
 import cn.foxkiar.loongarch.util.Result;
-import cn.foxkiar.loongarch.util.ValidatedList;
+import cn.foxkiar.loongarch.validation.ValidatedList;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -66,8 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Result<IPage<User>>> page(@ModelAttribute Page<User> page, @ModelAttribute @Validated User user) {
-        log.info("page: {}, user: {}", page, user);
+    public ResponseEntity<Result<IPage<User>>> page(@ModelAttribute Page<User> page, @ModelAttribute User user) {
         return ResponseEntity.ok(Result.success(userService.getUserPages(page, user)));
     }
 }

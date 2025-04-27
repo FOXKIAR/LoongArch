@@ -1,4 +1,4 @@
-package cn.foxkiar.loongarch.util;
+package cn.foxkiar.loongarch.validation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
