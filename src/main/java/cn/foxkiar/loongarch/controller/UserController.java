@@ -6,7 +6,6 @@ import cn.foxkiar.loongarch.util.Result;
 import cn.foxkiar.loongarch.validation.ValidatedList;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
 import static cn.foxkiar.loongarch.util.Result.message;
 import static cn.foxkiar.loongarch.util.Result.success;
 import static java.util.Objects.isNull;
@@ -31,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Result<User>> login(@RequestBody @Validated User user, HttpSession session) {
+    public ResponseEntity<Result<User>> login(@RequestBody  User user, HttpSession session) {
         user.setPassword(Base64.encode(user.getPassword()));
         if (isNull(user = userService.getUser(user)))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
@@ -65,8 +63,8 @@ public class UserController {
                         body(Result.message(Result.Message.ID_NOT_FOUND));
     }
 
-    @GetMapping("/page")
-    public ResponseEntity<Result<IPage<User>>> page(@ModelAttribute Page<User> page, @ModelAttribute User user) {
-        return ResponseEntity.ok(Result.success(userService.getUserPages(page, user)));
+    @GetMapping("/page/{currentPage}")
+    public ResponseEntity<Result<IPage<User>>> page(@PathVariable Integer currentPage, @ModelAttribute User user) {
+        return ResponseEntity.ok(Result.success(userService.getUserPages(currentPage, user)));
     }
 }

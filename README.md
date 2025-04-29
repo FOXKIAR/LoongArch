@@ -11,27 +11,13 @@
     │       ├── java                                        // java 代码目录
     │           ├── cn/foxkiar/loongarch                    // 包名
     │               ├── config                              // 配置目录
-    │                   ├── MybatisPlusConfig.java          // Mybatis-Plus配置文件
     │               ├── controller                          // 控制层接口目录
-    │                   ├── HostController.java             // 设备信息控制层接口
-    │                   ├── UserController.java             // 用户控制层接口
     │               ├── entity                              // 实体类目录
-    │                   ├── HostInfo.java                   // 设备信息实体
-    │                   ├── User.java                       // 用户实体
     │               ├── exception                           // 异常类目录
-    │                   ├── GlobalExceptionHandler.java     // 全局异常处理控制器
     │               ├── mapper                              // 持久层目录
-    │                   ├── UserMapper.java                 // 用户持久层
     │               ├── service                             // 服务层目录
-    │                   ├── UserService.java                // 用户服务层
     │               ├── util                                // 工具类目录
-    │                   ├── Result.java                     // 统一封装返回体格式
-    │                   ├── SizeUtil.java                   // 存储空间大小单位工具
-    │                   ├── TimeUtil.java                   // 时间单位工具
     │               ├── validation                          // 效验工具目录
-    │                   ├── IsPhoneValidator.java           // 验证是否为手机号
-    │                   ├── Phone.java                      // 效验手机号注解类
-    │                   ├── ValidatedList.java              // 效验 List
     │               ├── LoongArchApplication.java           // 启动 Main 函数文件
     │       ├── resource                                    // 资源目录
     │           ├── static                                  // 静态资源目录
@@ -46,17 +32,26 @@
 
 # 使用说明
 您可以使用git克隆到本地后使用：
-```shell
-git clone https://github.com/FOXKIAR/LoongArch.git
+```bash
+# 克隆项目到本地
+ash
+# 克隆项目到本地
+git clone URL_ADDRESSgit clone https://github.com/FOXKIAR/LoongArch.git
+# 进入项目目录
 cd LoongArch
-maven package
+# 编译项目
+mvn clean package
+# 运行项目
 java -jar target/loong-arch-0.0.1-SNAPSHOT.jar
 ```
 或者下载ZIP解压后使用：
-```shell
-wget https://codeload.github.com/FOXKIAR/LoongArch/zip/refs/heads/server-spring
+```bash
+# 下载ZIP
+wget URL_ADDRESSwget https://codeload.github.com/FOXKIAR/LoongArch/zip/refs/heads/server-spring
+# 解压ZIP
 unzip server-spring.zip
-maven package
-java -jar target/loong-arch-0.0.1-SNAPSHOT.jar
+# 编译项目
+mvn clean package
+# 运行项目
+java -jar target/loong-arch-0.0.1-SNAPSHOT.jar  
 ```
-
