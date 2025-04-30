@@ -1,6 +1,8 @@
 package cn.foxkiar.loongarch.entity;
 
+import cn.foxkiar.loongarch.validation.Groups;
 import cn.foxkiar.loongarch.validation.Phone;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -17,17 +19,18 @@ import java.io.Serializable;
 public class User implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    @NotBlank(message = "姓名不能为空", groups = {Groups.Save.class})
     private String name;
-    @NotBlank(message = "用户名不能为空")
-    @Length(min = 8, max = 16, message = "用户名的长度应该在8到16字符之间")
+    @NotBlank(message = "账号不能为空", groups = {Groups.Login.class, Groups.Save.class})
+    @Length(min = 8, max = 16, message = "账号的长度应该在8到16字符之间", groups = {Groups.Login.class, Groups.Save.class})
     private String account;
     @TableField(select = false)
-    @NotBlank(message = "密码不能为空")
-    @Length(min = 8, max = 16, message = "密码的长度应该在8到16字符之间")
+    @NotBlank(message = "密码不能为空", groups = {Groups.Login.class})
+    @Length(min = 8, max = 16, message = "密码的长度应该在8到16字符之间", groups = {Groups.Login.class})
     private String password;
     private Integer permission;
-    @Email
+    @Email(groups = {Groups.Save.class})
     private String email;
-    @Phone
+    @Phone(groups = {Groups.Save.class})
     private String phone;
 }

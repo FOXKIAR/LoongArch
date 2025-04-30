@@ -3,6 +3,7 @@ package cn.foxkiar.loongarch.controller;
 import cn.foxkiar.loongarch.entity.User;
 import cn.foxkiar.loongarch.service.UserService;
 import cn.foxkiar.loongarch.util.Result;
+import cn.foxkiar.loongarch.validation.Groups;
 import cn.foxkiar.loongarch.validation.ValidatedList;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Result<User>> login(@RequestBody  User user, HttpSession session) {
+    public ResponseEntity<Result<User>> login(@RequestBody @Validated({Groups.Login.class}) User user, HttpSession session) {
         user.setPassword(Base64.encode(user.getPassword()));
         if (isNull(user = userService.getUser(user)))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Result<User>> update(@RequestBody @Validated User user) {
+    public ResponseEntity<Result<User>> update(@RequestBody @Validated({Groups.Save.class}) User user) {
         return userService.updateUser(user) != 0 ?
                 ResponseEntity.ok(Result.success(null)) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).
