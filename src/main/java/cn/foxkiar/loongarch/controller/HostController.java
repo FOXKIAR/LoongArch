@@ -1,12 +1,14 @@
 package cn.foxkiar.loongarch.controller;
 
-import cn.foxkiar.loongarch.entity.HostInfo;
 import cn.foxkiar.loongarch.util.Result;
 import cn.hutool.system.OsInfo;
 import cn.hutool.system.SystemUtil;
 import cn.hutool.system.oshi.OshiUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +25,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/host")
 public class HostController {
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private class HostInfo {
+        private String hostname;
+        private String system;
+        private String cpu;
+        private String gpu;
+        private Date startTime;
+        private Long uptime;
+    }
     @GetMapping("/info")
     public ResponseEntity<Result<HostInfo>> getHostInfo() {
         HostInfo hostInfo = new HostInfo();

@@ -1,34 +1,34 @@
 package cn.foxkiar.loongarch;
 
-import cn.foxkiar.loongarch.entity.User;
-import cn.foxkiar.loongarch.mapper.UserMapper;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 @SpringBootTest
 class LoongArchApplicationTests {
-    @Autowired
-    UserMapper userMapper;
 
     @Test
     void contextLoads() {
-        Page<User> page = new Page<>();
-        page.setCurrent(1);
-        page.setSize(10);
-        List<OrderItem> orderItems = new ArrayList<>(){{
-            OrderItem orderItem = new OrderItem();
-            orderItem.setColumn("id");
-            orderItem.setAsc(false);
-            add(orderItem);
-        }};
-        page.setOrders(orderItems);
-        System.out.println(userMapper.selectPage(page,null));
+        try {
+            // 执行命令
+            Process process = Runtime.getRuntime().exec("C:\\Users\\foxkiar\\Develop\\python-3.13.3\\python.exe C:\\Users\\foxkiar\\Develop\\Projects\\test\\test.py");
+            
+            // 获取命令的输出流
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            }
+            
+            // 等待命令执行完成
+            int exitCode = process.waitFor();
+            System.out.println("Exit Code: " + exitCode);
+            } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            }
     }
 
 }

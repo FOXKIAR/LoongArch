@@ -20,7 +20,6 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/user")
 public class UserController {
     final UserService userService;
