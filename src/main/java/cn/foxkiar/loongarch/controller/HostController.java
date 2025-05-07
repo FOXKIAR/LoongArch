@@ -30,7 +30,7 @@ public class HostController {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    private class HostInfo {
+    public static class HostInfo {
         private String hostname;
         private String system;
         private String cpu;

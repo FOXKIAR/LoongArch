@@ -7,7 +7,6 @@ import cn.foxkiar.loongarch.validation.Groups;
 import cn.foxkiar.loongarch.validation.ValidatedList;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +17,6 @@ import static cn.foxkiar.loongarch.util.Result.message;
 import static cn.foxkiar.loongarch.util.Result.success;
 import static java.util.Objects.isNull;
 
-@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
