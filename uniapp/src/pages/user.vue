@@ -6,7 +6,7 @@ import {onLoad} from "@dcloudio/uni-app";
 
 const userPage = ref(new UserPage()),
     userQueryField = ref(new User()),
-    OperatedUser = ref(new User()),
+    operatedUser = ref(new User()),
     isUpdate = ref(true),
     popup = ref();
 
@@ -25,7 +25,7 @@ function getUserPage(current: number) {
 
 function remove() {
   uni.request({
-    url: serverUrl + "/user/delete/" + OperatedUser.value.id,
+    url: serverUrl + "/user/delete/" + operatedUser.value.id,
     method: "DELETE",
     success() {
       getUserPage(userPage.value.current);
@@ -37,7 +37,7 @@ function update() {
   uni.request({
     url: serverUrl + "/user/update",
     method: "PUT",
-    data: OperatedUser.value,
+    data: operatedUser.value,
   } as RequestOptions);
 }
 
@@ -54,7 +54,7 @@ function filterUser(filter: string | number[], column: string) {
 
 function clickOptionButton(user: User, flag: boolean) {
   isUpdate.value = flag;
-  OperatedUser.value = user;
+  operatedUser.value = user;
   popup.value.open();
 }
 
@@ -65,18 +65,18 @@ onLoad(() => getUserPage(1));
 <template>
   <uni-popup ref="popup" type="dialog">
     <uni-popup-dialog :title="isUpdate ? '更新信息' : '你确定要删除吗？'" @confirm="isUpdate ? update() : remove()">
-      <uni-forms v-if=isUpdate id="input-form" :modelValue=OperatedUser :rules=userRules validate-trigger="blur">
+      <uni-forms v-if=isUpdate id="input-form" :modelValue=operatedUser :rules=userRules validate-trigger="blur">
         <uni-forms-item class="item" label="姓名：" name="name">
-          <uni-easyinput v-model=OperatedUser.name type="text"/>
+          <uni-easyinput v-model=operatedUser.name type="text"/>
         </uni-forms-item>
         <uni-forms-item class="item" label="账号：" name="account">
-          <uni-easyinput v-model=OperatedUser.account type="text"/>
+          <uni-easyinput v-model=operatedUser.account type="text"/>
         </uni-forms-item>
         <uni-forms-item class="item" label="邮箱：" name="email">
-          <uni-easyinput v-model=OperatedUser.email type="text"/>
+          <uni-easyinput v-model=operatedUser.email type="text"/>
         </uni-forms-item>
         <uni-forms-item class="item" label="手机号：" name="phone">
-          <uni-easyinput v-model=OperatedUser.phone type="text"/>
+          <uni-easyinput v-model=operatedUser.phone type="text"/>
         </uni-forms-item>
       </uni-forms>
     </uni-popup-dialog>
@@ -85,7 +85,7 @@ onLoad(() => getUserPage(1));
     <uni-card id="user-card" title="用户">
       <uni-table id="table">
         <uni-tr>
-          <uni-th>{{ "ID" }}</uni-th>
+          <uni-th width="80px">{{ "ID" }}</uni-th>
           <uni-th filter-type="search" @filter-change="filterUser($event.filter, 'name')">{{ "姓名" }}</uni-th>
           <uni-th filter-type="search" @filter-change="filterUser($event.filter, 'account')">{{ "账号" }}</uni-th>
           <uni-th filter-type="search" @filter-change="filterUser($event.filter, 'phone')">{{ "手机号" }}</uni-th>

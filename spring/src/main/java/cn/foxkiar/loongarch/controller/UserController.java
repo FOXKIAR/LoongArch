@@ -5,7 +5,7 @@ import cn.foxkiar.loongarch.mapper.UserMapper;
 import cn.foxkiar.loongarch.util.Result;
 import cn.foxkiar.loongarch.validation.Groups;
 import cn.foxkiar.loongarch.validation.ValidatedList;
-import cn.hutool.core.codec.Base64;
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Result<User>> login(@RequestBody @Validated({Groups.Login.class}) User user, HttpSession session) {
-        user.setPassword(Base64.encode(user.getPassword()));
+        user.setPassword(MD5.create().digestHex(user.getPassword()));
         if (isNull(user = userMapper.selectOne(new LambdaQueryWrapper<>(user))))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
                     body(message("账号或密码不正确"));
@@ -42,7 +42,7 @@ public class UserController {
     public ResponseEntity<Result<?>> append(@RequestBody @Validated ValidatedList<User> users) {
         int successCount = 0;
         for (User user : users.getData()) {
-            user.setPassword(Base64.encode(user.getPassword()));
+            user.setPassword(MD5.create().digestHex(user.getPassword()));
             successCount += userMapper.insert(user);
         }
         return successCount == users.size() ?

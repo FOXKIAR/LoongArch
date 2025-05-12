@@ -1,10 +1,11 @@
 export class Patrol {
-    id: number;
+    recordDate: Date;
     userId: number;
     userName: string;
     isNormal: boolean;
     comment: string;
-    recordDate: Date;
+    startDate: Date;
+    endDate: Date;
 }
 
 export class PatrolPage {

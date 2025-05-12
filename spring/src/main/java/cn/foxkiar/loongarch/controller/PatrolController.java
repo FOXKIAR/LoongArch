@@ -4,6 +4,9 @@ import cn.foxkiar.loongarch.entity.Patrol;
 import cn.foxkiar.loongarch.entity.User;
 import cn.foxkiar.loongarch.mapper.PatrolMapper;
 import cn.foxkiar.loongarch.util.Result;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +34,17 @@ public class PatrolController {
                 ResponseEntity.ok(Result.success(null)) :
                 ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
                         body(Result.message("未知错误"));
+    }
+
+    @GetMapping("/page/{currentPage}")
+    public ResponseEntity<Result<IPage<Patrol>>> page(@PathVariable("currentPage") int currentPage, @ModelAttribute Patrol patrol) {
+        LambdaQueryWrapper<Patrol> wrapper = new LambdaQueryWrapper<>();
+        if (patrol.getStartDate() != null) wrapper.ge(Patrol::getRecordDate, new Date(patrol.getStartDate()));
+        if (patrol.getEndDate() != null) wrapper.le(Patrol::getRecordDate, new Date(patrol.getEndDate()));
+        if (patrol.getUserId() != null) wrapper.eq(Patrol::getUserId, patrol.getUserId());
+        if (patrol.getUserName() != null) wrapper.like(Patrol::getUserName, patrol.getUserName());
+        if (patrol.getIsNormal() != null) wrapper.eq(Patrol::getIsNormal, patrol.getIsNormal());
+        if (patrol.getComment() != null) wrapper.like(Patrol::getComment, patrol.getComment());
+        return ResponseEntity.ok(Result.success(patrolMapper.selectPage(new Page<>(currentPage, 10), wrapper)));
     }
 }

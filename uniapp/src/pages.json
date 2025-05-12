@@ -11,6 +11,7 @@
 	"pages": [
 		{"path": "pages/login"},
 		{"path": "pages/user"},
+		{"path": "pages/patrol"},
 	],
 	"globalStyle": {
 		"titleNView": false,
