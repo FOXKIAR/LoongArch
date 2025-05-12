@@ -1,0 +1,22 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+			"^quni-(.*)": "@quni/uni-ucharts/components/quni-$1/quni-$1.vue",
+			"^my-(.*)": "/src/template/my-$1.vue"
+
+		}
+	},
+	"pages": [
+		{"path": "pages/login"},
+		{"path": "pages/user"},
+	],
+	"globalStyle": {
+		"titleNView": false,
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "Loong-Arch",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
