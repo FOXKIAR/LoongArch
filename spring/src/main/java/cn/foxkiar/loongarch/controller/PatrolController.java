@@ -26,7 +26,6 @@ public class PatrolController {
     @PostMapping("/append")
     public ResponseEntity<Result<?>> append(@RequestBody Patrol patrol,  HttpSession session) {
         User currentUser = (User) session.getAttribute("LOGIN_USER");
-        System.out.println(currentUser);
         patrol.setUserId(currentUser.getId());
         patrol.setUserName(currentUser.getName());
         patrol.setRecordDate(new Date());

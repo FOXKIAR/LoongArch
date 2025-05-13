@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Patrol, PatrolPage, patrolRules} from "../api/patrol";
+import {Patrol, PatrolPage} from "../api/patrol";
 import {ref} from "vue";
 import {Result, serverUrl} from "../api/common";
 import {onLoad} from "@dcloudio/uni-app";
@@ -32,30 +32,41 @@ function filterPatrol(filter: any, column: string) {
   getPatrolPage(patrolPage.value.current)
 }
 
+function popupOpen() {
+  popup.value.open()
+}
+
+function addPatrol() {
+  uni.request({
+    url: serverUrl + "/patrol/append",
+    method: "POST",
+    data: insertPatrol.value,
+    withCredentials: true
+  } as RequestOptions);
+}
+
 // 加载完成后获取第一页用户列表
 onLoad(() => getPatrolPage(1));
 </script>
 
 <template>
   <uni-popup ref="popup" type="dialog">
-    <uni-popup-dialog title="记录" @confirm="">
-      <uni-forms id="input-form" :modelValue=insertPatrol :rules=patrolRules validate-trigger="blur">
-        <uni-forms-item class="item" label="设备是否正常运行：" name="isNormal">
-          <uni-data-checkbox v-model="insertPatrol.isNormal" :localdata="[
+    <uni-popup-dialog title="记录" @confirm="addPatrol">
+      <uni-forms id="input-form" :modelValue=insertPatrol>
+        {{ "设备是否正常运行：" }}
+        <uni-data-checkbox v-model="insertPatrol.isNormal" :localdata="[
                         {value: true, text: '是'},
                         {value: false, text: '否'}
                     ]"/>
-        </uni-forms-item>
-        <uni-forms-item class="item" label="备注：" name="comment">
-          <uni-easyinput v-model=insertPatrol.comment type="text"/>
-        </uni-forms-item>
+        {{ "备注：" }}
+        <uni-easyinput v-model=insertPatrol.comment type="textarea"/>
       </uni-forms>
     </uni-popup-dialog>
   </uni-popup>
 
   <div id="patrol-div">
     <uni-card id="patrol-card" title="监测记录">
-      <button @click="() => popup.value.open()">{{ "记录" }}</button>
+      <button @click="popupOpen">{{ "记录" }}</button>
       <uni-table id="table">
         <uni-tr>
           <uni-th filter-type="date" @filter-change="filterPatrol($event.filter, 'recordDate')">{{ "监测日期" }}</uni-th>
@@ -79,6 +90,10 @@ onLoad(() => getPatrolPage(1));
 </template>
 
 <style scoped lang="scss">
+#input-form {
+  width: 20vw;
+}
+
 #patrol-div {
   display: flex;
 
