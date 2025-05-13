@@ -1,17 +1,11 @@
 package cn.foxkiar.loongarch;
 
 import cn.foxkiar.loongarch.entity.Patrol;
-import cn.foxkiar.loongarch.entity.User;
 import cn.foxkiar.loongarch.mapper.PatrolMapper;
-import cn.foxkiar.loongarch.mapper.UserMapper;
-import cn.hutool.crypto.digest.MD5;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Date;
 
 @SpringBootTest

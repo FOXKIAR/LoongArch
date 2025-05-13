@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
-import {User, UserPage, Permission, userRules} from '../api/user';
-import {Result, serverUrl} from "../api/common";
+import {User, Permission, userRules} from '../interface/user';
+import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
 
-const userPage = ref(new UserPage()),
+const userPage = ref(new Page<User>()),
     userQueryField = ref(new User()),
     operatedUser = ref(new User()),
     isUpdate = ref(true),

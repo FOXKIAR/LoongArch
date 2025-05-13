@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {Patrol, PatrolPage} from "../api/patrol";
+import {Patrol} from "../interface/patrol";
 import {ref} from "vue";
-import {Result, serverUrl} from "../api/common";
+import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
 
-const patrolPage = ref(new PatrolPage()),
+const patrolPage = ref(new Page<Patrol>()),
     patrol = ref(new Patrol()),
     insertPatrol = ref(new Patrol()),
     popup = ref();

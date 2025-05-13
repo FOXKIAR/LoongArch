@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { User, userRules} from "../api/user";
-import { Result, serverUrl } from "../api/common";
+import { User, userRules} from "../interface/user";
+import { Result, serverUrl } from "../interface/common";
 import {ref} from "vue";
 
 const user = ref(new User()),

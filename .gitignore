@@ -1,3 +1,4 @@
 .idea
 uniapp/node_modules
+uniapp/package-lock.json
 spring/target

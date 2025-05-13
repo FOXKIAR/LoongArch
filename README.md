@@ -1,59 +1,88 @@
-# 项目介绍
-在不可控国际因素及国内数字经济转型需求的驱动下，我国IT 产业自主可控的紧迫性愈加凸显，为了解决核心技术“卡脖子”的问题，科技自立自强已是我国的一项国家战略。  
-本项目《基于龙架构国产操作系统的服务器运维管理平台》又作者本人独自开发，也为国产化生态技术也出一份力。
+## 项目介绍
+为实现国产化转型，基于国产化操作系统的运维管理平台。
 
-# 环境依赖
+使用spring作为后端业务逻辑功能实现、前端使用uni-app + uni-ui实现界面、功能。
+
+目前实现了用户管理、数据库管理、服务器资源负载可视化等基本运维功能。
+
+
+## 环境依赖
++ java 17 及以上
++ mariadb
 + node.js
-+ [server端](https://github.com/FOXKIAR/LoongArch/tree/server-spring)
 
-# 目录结构描述
-    ├── src                                                 // 源代码目录
-    │   ├── api                                             // 接口目录
-    │       ├── common.ts                                   // 公共接口文件
-    │       ├── host.ts                                     // 设备信息模块后端接口
-    │       ├── user.ts                                     // 用户模块后端接口
-    │   ├── pages                                           // 页面目录
-    │       ├── database.vue                                // 数据库模块
-    │       ├── index.vue                                   // 主页
-    │       ├── log.vue                                     // 日志模块
-    │       ├── login.vue                                   // 登录页面
-    │       ├── settings.vue                                // 设置
-    │       ├── status.vue                                  // 设备状态模块
-    │       ├── terminal.vue                                // 终端
-    │       ├── user.vue                                    // 用户模块
-    │   ├── template                                        // 公用 vue 模板目录
-    │       ├── lang-select.vue                             // 选择语言 vue 模板
-    │       ├── menu-bar.vue                                // 菜单栏 vue 模板
-    │   ├── util                                            // 工具目录
-    │       ├── languages                                   // 各语言显示存储目录
-    │           ├── chinese-simplified.ts                   // 用于存储简体中文显示
-    │           ├── english.ts                              // 用于存储英文显示
-    │       ├── formatUtil.ts                               // 用于将数据格式化为可读格式
-    │       ├── lang.ts                                     // 用于语言转换
-    │   ├── App.vue                                         // 应用配置文件，用来配置 App 全局样式以及监听应用生命周期
-    │   ├── main.js                                         // Vue 初始化入口文件
-    │   ├── manifest.json                                   // 配置应用名称、appid、logo、版本等打包信息
-    │   ├── pages.json                                      // 配置页面路由、导航条、选项卡等页面类信息
-    │   ├── uni.scss                                        // 内置的常用样式变量
-    ├── index.html                                          // 主入口页面
-    ├── index.html                                          // 主入口页面
-    ├── package.json                                        // npm 依赖文件
-    ├── README.md                                           // 自述文件
-    └── vite.config.js                                      // vite 配置文件
+## 目录结构描述
+spring
 
-# 使用说明
-您可以使用git克隆到本地后使用：
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── cn
+    │   │   │       └── foxkiar
+    │   │   │           └── loongarch
+    │   │   │               ├── config                              // 该目录存放配置类相关
+    │   │   │               │   ├── CorsConfig.java                 // 配置跨域
+    │   │   │               │   └── MybatisPlusConfig.java          // 分页插件
+    │   │   │               ├── controller                          // 存放各种接口，详细请查阅[API接口文档]
+    │   │   │               │   ├── DatabaseController.java 
+    │   │   │               │   ├── HostController.java 
+    │   │   │               │   ├── PatrolController.java   
+    │   │   │               │   └── UserController.java 
+    │   │   │               ├── entity                              // 存放实体类相关
+    │   │   │               │   ├── Patrol.java                     // 巡检记录实体类
+    │   │   │               │   └── User.java                       // 用户实体类
+    │   │   │               ├── exception   
+    │   │   │               │   └── GlobalExceptionHandler.java     // 全局异常处理
+    │   │   │               ├── mapper                              // 存放数据库持久层相关
+    │   │   │               │   ├── DatabaseMapper.java 
+    │   │   │               │   ├── PatrolMapper.java   
+    │   │   │               │   └── UserMapper.java 
+    │   │   │               ├── util    
+    │   │   │               │   └── Result.java                     // 统一响应格式封装
+    │   │   │               ├── validation  
+    │   │   │               │   ├── Groups.java                     // 为分组效验定义此类
+    │   │   │               │   ├── IsPhoneValidator.java           // 自定义效验规则：是否为手机号
+    │   │   │               │   ├── Phone.java                      // 自定义效验注解
+    │   │   │               │   └── ValidatedList.java              // 为确保list中也进行效验而创建此类
+    │   │   │               └── LoongArchApplication.java
+    │   │   └── resources
+    │   └── test
+    ├── pom.xml
+    └── API接口文档.md
+
+
+uniapp  
+
+    ├── src
+    │   ├── interface       
+    │   │   ├── common.ts
+    │   │   ├── patrol.ts
+    │   │   └── userr.ts
+    │   ├── pages                   // 存放vue页面
+    │   │   ├── database.vue
+    │   │   ├── login.vue
+    │   │   ├── patrol.vue
+    │   │   └── user.vue
+    │   ├── template                // 自定义vue模板
+    │   │   ├── my-menu-bar.vue
+    │   │   └── my-notice-bar.vue
+    │   ├── App.vue
+    │   ├── main.js
+    │   ├── manifest.json
+    │   ├── pages.json
+    │   └── uni.scss
+    ├── index.html
+    ├── package.json
+    ├── tsconfig.json
+    └── vite.config.js
+
+## 使用说明
+你可以直接运行我已经打包好的jar包来使用
 ```shell
-git clone -b client-uniapp https://github.com/FOXKIAR/LoongArch.git
-cd client-uniapp
-npm install
-npm run dev:h5
-```
-或者下载ZIP解压后使用：
-```shell
-wget https://codeload.github.com/FOXKIAR/LoongArch/zip/refs/heads/server-spring
-unzip client-uniapp.zip
-npm install
-npm run dev:h5
+java -jar loong-arch-0.0.1-SNAPSHOT.jar
 ```
 
+或者你也可以克隆它然后自己再做更改
+```shell
+git clone https://github.com/FOXKIAR/LoongArch.git
+```
