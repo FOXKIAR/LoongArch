@@ -21,7 +21,7 @@ function login(user: User) {
         messageType.value = "success";
         uni.setStorageSync("me", result.data);
         // 延迟 2.5 秒后跳转到主页
-        setTimeout(() => uni.redirectTo({url: "/pages/index"}), 2500);
+        setTimeout(() => uni.redirectTo({url: "/pages/host"}), 2500);
       }
     },
     fail() {

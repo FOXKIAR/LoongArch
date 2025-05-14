@@ -63,6 +63,7 @@ onLoad(() => getUserPage(1));
 </script>
 
 <template>
+  <my-menu-bar/>
   <uni-popup ref="popup" type="dialog">
     <uni-popup-dialog :title="isUpdate ? '更新信息' : '你确定要删除吗？'" @confirm="isUpdate ? update() : remove()">
       <uni-forms v-if=isUpdate id="input-form" :modelValue=operatedUser :rules=userRules validate-trigger="blur">

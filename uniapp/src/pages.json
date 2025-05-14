@@ -10,8 +10,10 @@
 	},
 	"pages": [
 		{"path": "pages/login"},
+		{"path": "pages/host"},
 		{"path": "pages/user"},
 		{"path": "pages/patrol"},
+		{"path": "pages/database"},
 	],
 	"globalStyle": {
 		"titleNView": false,

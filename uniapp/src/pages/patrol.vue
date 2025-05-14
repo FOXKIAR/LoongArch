@@ -50,6 +50,7 @@ onLoad(() => getPatrolPage(1));
 </script>
 
 <template>
+  <my-menu-bar/>
   <uni-popup ref="popup" type="dialog">
     <uni-popup-dialog title="记录" @confirm="addPatrol">
       <uni-forms id="input-form" :modelValue=insertPatrol>

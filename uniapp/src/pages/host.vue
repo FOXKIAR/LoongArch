@@ -4,6 +4,7 @@
 
 <template>
   <my-menu-bar/>
+
 </template>
 
 <style scoped lang="scss">
