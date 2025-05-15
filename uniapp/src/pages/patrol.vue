@@ -3,6 +3,7 @@ import {Patrol} from "../interface/patrol";
 import {ref} from "vue";
 import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
+import {formatDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
 
 const patrolPage = ref(new Page<Patrol>()),
     patrol = ref(new Patrol()),
@@ -79,7 +80,7 @@ onLoad(() => getPatrolPage(1));
           <uni-th filter-type="search" @filter-change="filterPatrol($event.filter, 'comment')">{{ "备注" }}</uni-th>
         </uni-tr>
         <uni-tr v-for="patrol in (patrolPage.records as Patrol[])">
-          <uni-td>{{ patrol.recordDate.toLocaleString().slice(0, 10) }}</uni-td>
+          <uni-td>{{ formatDate(new Date(patrol.recordDate), "yyyy/MM/dd") }}</uni-td>
           <uni-td>{{ patrol.userName }}</uni-td>
           <uni-td>{{ patrol.isNormal ? '是' : '否' }}</uni-td>
           <uni-td>{{ patrol.comment }}</uni-td>

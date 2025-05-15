@@ -30,9 +30,9 @@ function showDrawer() {
 
 <style scoped lang="scss">
 #show {
-  width: 3vw;
+  position: fixed;
+  width: 55px;
   height: 100vh;
-  float: left;
   line-height: 100vh;
   text-align: center;
 }
