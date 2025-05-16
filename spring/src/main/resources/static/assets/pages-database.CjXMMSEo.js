@@ -1,0 +1,1 @@
+import{_ as r}from "./my-menu-bar.Cl7HJ2Yh.js";import{c as s,j as a,o}from "./index-B7Dt8O4Z.js";import{_ as m,r as n}from "./uni-app.es.CJ55vtPu.js";const e=m({},[["render",function(m, e){const t=n(a("my-menu-bar"),r);return o(),s(t)}]]);export{e as default};
