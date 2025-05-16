@@ -125,7 +125,8 @@ onLoad(() => getUserPage(1));
 
 <style lang="scss" scoped>
 #user-div {
-  display: flex;
+  float: right;
+  width: 95vw;
 
   #user-card {
     height: 90vh;

@@ -3,7 +3,7 @@
 		"autoscan": true,
 		"custom": {
 			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
-			"^quni-(.*)": "@quni/uni-ucharts/components/quni-$1/quni-$1.vue",
+			"^qiun-(.*)": "@qiun/uni-ucharts/components/qiun-$1/qiun-$1.vue",
 			"^my-(.*)": "/src/template/my-$1.vue"
 
 		}

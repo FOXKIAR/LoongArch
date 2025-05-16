@@ -64,6 +64,8 @@
 │   │   ├── template                // 自定义vue模板
 │   │   │   ├── my-menu-bar.vue
 │   │   │   └── my-notice-bar.vue
+│   │   ├── template                // 自定义工具
+│   │   │   └── timeUtil.ts
 │   │   ├── App.vue
 │   │   ├── main.js
 │   │   ├── manifest.json

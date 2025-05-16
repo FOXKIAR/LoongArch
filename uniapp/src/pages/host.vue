@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {HostInfo} from "../interface/host";
+import {AreaCharts, HostInfo} from "../interface/host";
 import {Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
 import {formatTime} from "../util/timeUtil";
-import {friendlyDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
+import {formatDate, friendlyDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
 
-const hostInfo = ref(new HostInfo());
+const hostInfo = ref(new HostInfo()),
+    networkArea = ref(new AreaCharts()),
+    diskIOArea = ref(new AreaCharts())
 
 function getHostInfo() {
   uni.request({
@@ -21,8 +23,25 @@ function getHostInfo() {
   })
 }
 
+function getHardware() {
+  uni.request({
+    url: serverUrl + "/host/hardware",
+    method: "GET",
+    success(callback) {
+      const result: Result = callback.data as any;
+      networkArea.value.categories.push(formatDate(new Date(), "hh:mm:ss"));
+      networkArea.value.series[0] = {name: "上行", data: []};
+      networkArea.value.series[1] = {name: "下行", data: []};
+      networkArea.value.series[1].data.push((result.data.networkIFs[0].bytesRecv / Math.pow(1024, 2)).toFixed(2));
+      networkArea.value.series[0].data.push((result.data.networkIFs[0].bytesSent / Math.pow(1024, 2)).toFixed(2));
+
+    }
+  })
+}
+
 onLoad(() => {
   getHostInfo();
+  getHardware();
 })
 </script>
 
@@ -30,7 +49,10 @@ onLoad(() => {
   <my-menu-bar/>
   <div class="column" id="super">
     <div class="row" id="top">
-      <uni-card id="monitor" title="监控"></uni-card>
+      <uni-card id="monitor" title="监控">
+        <uni-segmented-control :current="0" :values="['123', '456']"/>
+        <qiun-data-charts type="area" :opts="{extra: {area: {type: 'curve'}}}" :chartData="networkArea"/>
+      </uni-card>
       <uni-card id="info" title="基本信息">
         <uni-table>
           <uni-tr/>
@@ -39,18 +61,17 @@ onLoad(() => {
                 switch (columnName) {
                   case "hostname": return "主机名称：";
                   case "system": return "系统名称：";
-                  case "cpu": return "CPU：";
-                  case "gpu": return "GPU：";
+                  case "cpu": return "CPU型号：";
+                  case "gpu": return "显卡名称：";
                   case "startTime": return "启动日期：";
-                  case "uptime": return "运行时间";
+                  case "uptime": return "运行时长";
                 }
             })(key) }}</uni-td>
-            <uni-td>{{ ((formatData: any) => {
-              switch (typeof formatData) {
-                case "number": return formatTime(formatData * 1000);
-                default: return formatData;
-              }
-            })(value) }}</uni-td>
+            <uni-td>{{ (() => {
+              if (typeof value == "number")
+                  return formatTime(value * 1000);
+              return value;
+            })() }}</uni-td>
           </uni-tr>
         </uni-table>
       </uni-card>
@@ -76,7 +97,7 @@ onLoad(() => {
 #super {
   float: right;
   width: 95vw;
-  height: 120vh;
+  height: 100vh;
 }
 
 #top {

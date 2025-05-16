@@ -42,8 +42,8 @@ function addPatrol() {
     url: serverUrl + "/patrol/append",
     method: "POST",
     data: insertPatrol.value,
-    withCredentials: true
   } as RequestOptions);
+  getPatrolPage(patrolPage.value.current);
 }
 
 // 加载完成后获取第一页用户列表
@@ -97,7 +97,8 @@ onLoad(() => getPatrolPage(1));
 }
 
 #patrol-div {
-  display: flex;
+  float: right;
+  width: 95vw;
 
   #patrol-card {
     height: 90vh;
