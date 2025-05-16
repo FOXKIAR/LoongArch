@@ -9,7 +9,7 @@ class LoongArchApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(OshiUtil.getHardware().getSoundCards());
+        System.out.println(OshiUtil.getCpuInfo().getUsed());
     }
 
 }

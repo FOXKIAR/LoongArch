@@ -1,3 +1,5 @@
+export const auto = -1;
+
 export const timeUnit = (() => {
     const second = 1000,
         minute = 60 * second,
@@ -9,7 +11,7 @@ export const timeUnit = (() => {
     return {year, month, day, hour, minute, second};
 })();
 
-export function formatTime(time:  number): string {
+export function formatTime(time: number, unit: number = -1): string {
     let result = "";
     for (let current in timeUnit) {
         if (time > timeUnit[current]) {
@@ -25,6 +27,8 @@ export function formatTime(time:  number): string {
             })(current);
             time %= timeUnit[current];
         }
+        if (timeUnit[current] == unit)
+            return result;
     }
     return result;
 }

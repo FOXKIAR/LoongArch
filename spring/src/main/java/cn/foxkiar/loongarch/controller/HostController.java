@@ -3,7 +3,6 @@ package cn.foxkiar.loongarch.controller;
 import cn.foxkiar.loongarch.util.Result;
 import cn.hutool.system.OsInfo;
 import cn.hutool.system.SystemUtil;
-import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import oshi.hardware.*;
 
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,23 +53,94 @@ public class HostController {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class Cpu {
+        private Double used;
+        private Double free;
+
+        public Cpu(Double used) {
+            this.used = used;
+            this.free = 100 - used;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Disk {
+        private String name;
+        private Long readBytes;
+        private Long writeBytes;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Memory {
+        private Long total;
+        private Long used;
+        private Long free;
+
+        public Memory(GlobalMemory memory) {
+            this.total = memory.getTotal();
+            this.free = memory.getAvailable();
+            this.used = this.total - this.free;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Network {
+        private String name;
+        private Long upBytes;
+        private Long downBytes;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Hardware {
-        private CpuInfo cpuInfo;
-        private List<GraphicsCard> graphicsCards;
-        private List<HWDiskStore> diskStores;
-        private GlobalMemory memory;
-        private List<NetworkIF> networkIFs;
+        private Cpu cpu;
+        private List<Disk> disks;
+        private Long diskTotal;
+        private Long diskUsed;
+        private Long diskFree;
+        private Memory memory;
+        private List<Network> networks;
     }
 
     @GetMapping("/hardware")
     public ResponseEntity<Result<Hardware>> getDiskSpace() {
         Hardware hardware = new Hardware();
-        hardware.setCpuInfo(OshiUtil.getCpuInfo());
+        hardware.setCpu(new Cpu(OshiUtil.getCpuInfo().getUsed()));
         HardwareAbstractionLayer layer = OshiUtil.getHardware();
-        hardware.setGraphicsCards(layer.getGraphicsCards());
-        hardware.setDiskStores(layer.getDiskStores());
-        hardware.setMemory(layer.getMemory());
-        hardware.setNetworkIFs(layer.getNetworkIFs());
+        List<Disk> disks = new ArrayList<>();
+        for (HWDiskStore diskStore : layer.getDiskStores()) {
+            Disk disk = new Disk();
+            disk.setName(diskStore.getName());
+            disk.setReadBytes(diskStore.getReadBytes());
+            disk.setWriteBytes(diskStore.getWriteBytes());
+            disks.add(disk);
+        }
+        List<Network> networks = new ArrayList<>();
+        for (NetworkIF networkIF : layer.getNetworkIFs()) {
+            Network network = new Network();
+            network.setName(networkIF.getName());
+            network.setUpBytes(networkIF.getBytesSent());
+            network.setDownBytes(networkIF.getBytesRecv());
+            networks.add(network);
+        }
+        hardware.setDisks(disks);
+        long total = 0, free = 0;
+        for (File root : File.listRoots()) {
+            total += root.getTotalSpace();
+            free += root.getFreeSpace();
+        }
+        hardware.setDiskTotal(total);
+        hardware.setDiskFree(free);
+        hardware.setDiskUsed(total - free);
+        hardware.setMemory(new Memory(layer.getMemory()));
+        hardware.setNetworks(networks);
         return ResponseEntity.ok(Result.success(hardware));
     }
 }
