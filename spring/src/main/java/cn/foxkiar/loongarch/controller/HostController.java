@@ -122,6 +122,8 @@ public class HostController {
             disk.setWriteBytes(diskStore.getWriteBytes());
             disks.add(disk);
         }
+        hardware.setDisks(disks);
+
         List<Network> networks = new ArrayList<>();
         for (NetworkIF networkIF : layer.getNetworkIFs()) {
             Network network = new Network();
@@ -130,7 +132,8 @@ public class HostController {
             network.setDownBytes(networkIF.getBytesRecv());
             networks.add(network);
         }
-        hardware.setDisks(disks);
+        hardware.setNetworks(networks);
+
         long total = 0, free = 0;
         for (File root : File.listRoots()) {
             total += root.getTotalSpace();
@@ -139,8 +142,8 @@ public class HostController {
         hardware.setDiskTotal(total);
         hardware.setDiskFree(free);
         hardware.setDiskUsed(total - free);
+
         hardware.setMemory(new Memory(layer.getMemory()));
-        hardware.setNetworks(networks);
         return ResponseEntity.ok(Result.success(hardware));
     }
 }

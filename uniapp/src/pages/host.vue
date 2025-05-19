@@ -3,8 +3,9 @@ import {ref} from "vue";
 import {AreaCharts, GaugeCharts, Hardware, HostInfo, PieCharts} from "../interface/host";
 import {Result, serverUrl} from "../interface/common";
 import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
-import {auto, formatTime} from "../util/timeUtil";
+import {formatTime} from "../util/timeUtil";
 import {formatDate, friendlyDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
+import {formatSize} from "../util/sizeUtil";
 
 const hostInfo = ref(new HostInfo()),
     networkAreas = ref([]),
@@ -14,10 +15,16 @@ const hostInfo = ref(new HostInfo()),
     isDisk = ref(true),
     cpuGauge = ref(new GaugeCharts()),
     memoryRing = ref(new PieCharts()),
-    memoryUsage = ref(0),
     diskPie = ref(new PieCharts()),
     diskUsage = ref(0),
-    current = ref(0);
+    current = ref(0),
+    lastTemp = ref(new class {
+      diskRead: number[] = [];
+      diskWrite: number[] = [];
+      networkUp: number[] = [];
+      networkDown: number[] = [];
+    });
+
 
 function getHostInfo() {
   uni.request({
@@ -39,41 +46,60 @@ function getHardware(count: number) {
     success(callback) {
       const hardware: Hardware = (callback.data as Result).data;
       for (let currentIndex = 0; currentIndex < hardware.disks.length; currentIndex++){
-        if (count < 1)
+        if (count < 1) {
           disks.value.push({value: currentIndex, text: hardware.disks[currentIndex].name});
+          lastTemp.value.diskRead.push(0);
+          lastTemp.value.diskWrite.push(0);
+        }
         diskAreas.value.push(new AreaCharts());
         diskAreas.value[currentIndex].categories.push(formatDate(new Date(), "hh:mm:ss"));
         diskAreas.value[currentIndex].series[0].name = "读取";
         diskAreas.value[currentIndex].series[1].name = "写入";
-        diskAreas.value[currentIndex].series[0].data.push(hardware.disks[currentIndex].readBytes);
-        diskAreas.value[currentIndex].series[1].data.push(hardware.disks[currentIndex].writeBytes);
+        diskAreas.value[currentIndex].series[0].data.push(
+            formatSize(hardware.disks[currentIndex].readBytes - lastTemp.value.diskRead[currentIndex]).size
+        );
+        lastTemp.value.diskRead[currentIndex] = hardware.disks[currentIndex].readBytes;
+        diskAreas.value[currentIndex].series[1].data.push(
+            formatSize(hardware.disks[currentIndex].writeBytes - lastTemp.value.diskWrite[currentIndex]).size
+        );
+        lastTemp.value.diskWrite[currentIndex] = hardware.disks[currentIndex].writeBytes;
         if (diskAreas.value[currentIndex].categories.length > 6) {
           diskAreas.value[currentIndex].categories.shift();
           diskAreas.value[currentIndex].series[0].data.shift();
           diskAreas.value[currentIndex].series[1].data.shift();
         }
       }
-      for (let currentIndex = 0; currentIndex < hardware.disks.length; currentIndex++){
-        if (count < 1)
+      for (let currentIndex = 0; currentIndex < hardware.networks.length; currentIndex++){
+        if (count < 1) {
           networks.value.push({value: currentIndex, text: hardware.networks[currentIndex].name});
+          lastTemp.value.networkUp.push(0);
+          lastTemp.value.networkDown.push(0);
+        }
         networkAreas.value.push(new AreaCharts());
         networkAreas.value[currentIndex].categories.push(formatDate(new Date(), "hh:mm:ss"));
         networkAreas.value[currentIndex].series[0].name = "上行";
         networkAreas.value[currentIndex].series[1].name = "下行";
-        networkAreas.value[currentIndex].series[0].data.push(hardware.networks[currentIndex].upBytes);
-        networkAreas.value[currentIndex].series[1].data.push(hardware.networks[currentIndex].downBytes);
+        networkAreas.value[currentIndex].series[0].data.push(
+            formatSize(hardware.networks[currentIndex].upBytes - lastTemp.value.networkUp[currentIndex]).size
+        );
+        lastTemp.value.networkUp[currentIndex] = hardware.networks[currentIndex].upBytes;
+
+        networkAreas.value[currentIndex].series[1].data.push(
+            formatSize(hardware.networks[currentIndex].downBytes - lastTemp.value.networkDown[currentIndex]).size
+        );
+        lastTemp.value.networkDown[currentIndex] = hardware.networks[currentIndex].downBytes;
         if (networkAreas.value[currentIndex].categories.length > 6) {
           networkAreas.value[currentIndex].categories.shift();
           networkAreas.value[currentIndex].series[0].data.shift();
           networkAreas.value[currentIndex].series[1].data.shift();
         }
       }
-      cpuGauge.value.series[0].data = Number((hardware.cpu.used / 100).toFixed(4));
-      memoryRing.value.series[0].data[0].value = hardware.memory.used;
-      memoryRing.value.series[0].data[1].value = hardware.memory.free;
-      memoryUsage.value = Number((hardware.memory.used / hardware.memory.total * 100).toFixed(2));
-      diskPie.value.series[0].data[0].value = hardware.diskUsed;
-      diskPie.value.series[0].data[1].value = hardware.diskFree;
+      cpuGauge.value.series[0].data = hardware.cpu.used / 100;
+      memoryRing.value.series[0].data[0].value = formatSize(hardware.memory.used, "GB").size;
+      memoryRing.value.series[0].data[1].value = formatSize(hardware.memory.free, "GB").size;
+
+      diskPie.value.series[0].data[0].value = formatSize(hardware.diskUsed, "GB").size;
+      diskPie.value.series[0].data[1].value = formatSize(hardware.diskFree, "GB").size;
       diskUsage.value = Number((hardware.diskUsed / hardware.diskTotal * 100).toFixed(2));
     }
   });
@@ -86,7 +112,6 @@ onShow(() => {
 });
 
 onHide(() => {
-  console.log(isDisk.value)
   clearInterval(interval);
   interval = null;
 })
@@ -125,7 +150,7 @@ onLoad(() => {
             })(key) }}</uni-td>
             <uni-td>{{ (() => {
               if (typeof value == "number")
-                  return formatTime(value * 1000, auto);
+                  return formatTime(value * 1000);
               return value;
             })() }}</uni-td>
           </uni-tr>
@@ -134,11 +159,11 @@ onLoad(() => {
     </div>
     <div class="row" id="bottom">
       <uni-card id="cpu" title="CPU">
-        <qiun-data-charts type="gauge" :opts="{title: {name: cpuGauge.series[0].data * 100 + '%'}, subtitle: {name: 'CPU使用率'}, update: true, duration: 0, animation: false}"
+        <qiun-data-charts type="gauge" :opts="{title: {name: (cpuGauge.series[0].data * 100).toFixed(2) + '%'}, subtitle: {name: 'CPU使用率'}, update: true, duration: 0, animation: false}"
                           :chartData="cpuGauge"/>
       </uni-card>
       <uni-card id="memory" title="内存">
-        <qiun-data-charts type="ring" :opts="{title: {name: memoryUsage + '%'}, subtitle: {name: '内存使用率'}, update: true, duration: 0, animation: false}"
+        <qiun-data-charts type="ring" :opts="{title: {name: memoryRing.series[0].data[0].value + 'GB'}, subtitle: {name: '内存使用量'}, update: true, duration: 0, animation: false}"
                           :chartData="memoryRing"/>
       </uni-card>
       <uni-card id="disk" title="磁盘空间">

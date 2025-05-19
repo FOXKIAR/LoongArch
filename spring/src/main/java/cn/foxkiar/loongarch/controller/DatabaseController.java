@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/database")
@@ -19,9 +20,9 @@ public class DatabaseController {
         this.databaseMapper = databaseMapper;
     }
 
-    @GetMapping("/get/all/db")
+    @GetMapping("/all")
     public ResponseEntity<Result<List<String>>> getAllDb() {
-        List<String> dbs = databaseMapper.getAllDBNames();
+        List<String> dbs = databaseMapper.getDatabases();
         dbs.remove("information_schema");
         dbs.remove("mysql");
         dbs.remove("performance_schema");
@@ -30,8 +31,13 @@ public class DatabaseController {
         return ResponseEntity.ok(Result.success(dbs));
     }
 
-    @GetMapping("/{database}")
+    @GetMapping("/all/{database}")
     public ResponseEntity<Result<List<String>>> getTables(@PathVariable String database) {
-        return ResponseEntity.ok(Result.success(databaseMapper.getAllTableNames(database)));
+        return ResponseEntity.ok(Result.success(databaseMapper.getTables(database)));
+    }
+
+    @GetMapping("/struct/{database}/{table}")
+    public ResponseEntity<Result<List<Map<String, Object>>>> getTables(@PathVariable String database, @PathVariable String table) {
+        return ResponseEntity.ok(Result.success(databaseMapper.getTableStruct(database, table)));
     }
 }
