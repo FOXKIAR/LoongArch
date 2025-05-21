@@ -1,9 +1,8 @@
 export class TableStruct {
      Field: string;
      Type: string;
-     Null: boolean;
+     Null: string;
      Key: string;
-     Default: any;
-     Extra: string;
+     Default: string;
      Comment: string;
 }
