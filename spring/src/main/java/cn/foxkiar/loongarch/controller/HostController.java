@@ -28,7 +28,7 @@ public class HostController {
         private String hostname;
         private String system;
         private String cpu;
-        private String gpu;
+        private List<String> gpu;
         private Date startTime;
         private Long uptime;
     }
@@ -43,7 +43,7 @@ public class HostController {
         hostInfo.setHostname(SystemUtil.getHostInfo().getName());
         hostInfo.setGpu(OshiUtil.getHardware().getGraphicsCards().stream().
                 // 根据 GraphicsCard 对象的 name 成员变量重新生成 List
-                map(GraphicsCard::getName).collect(Collectors.toList()).toString());
+                map(GraphicsCard::getName).collect(Collectors.toList()));
         long uptimeSeconds = OshiUtil.getOs().getSystemUptime();
         hostInfo.setStartTime(new Date(System.currentTimeMillis() - uptimeSeconds * 1000));
         hostInfo.setUptime(uptimeSeconds);

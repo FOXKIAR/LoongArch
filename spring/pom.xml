@@ -89,7 +89,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>cn.foxkiar.loongarch.LoongArchApplication</mainClass>
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>

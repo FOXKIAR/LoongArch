@@ -1,4 +1,6 @@
 .idea
 uniapp/node_modules
 uniapp/package-lock.json
+uniapp/dist
 spring/target
+spring/src/main/resources/static
