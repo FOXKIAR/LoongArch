@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://172.17.189.44:3306/
-    username: root
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.17.189.44:3306/
+    username: sinouser1
     password: woaini1314@!&
