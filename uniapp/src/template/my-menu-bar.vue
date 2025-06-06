@@ -8,7 +8,8 @@ const showLeft = ref(),
       host: "主机信息",
       user: "用户",
       patrol: "巡检记录",
-      database: "数据库"
+      database: "数据库",
+      console: "控制台"
     }
 
 function showDrawer() {

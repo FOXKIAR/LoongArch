@@ -14,6 +14,7 @@
 		{"path": "pages/user"},
 		{"path": "pages/patrol"},
 		{"path": "pages/database"},
+		{"path": "pages/console"},
 	],
 	"globalStyle": {
 		"titleNView": false,
