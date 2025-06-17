@@ -9,12 +9,10 @@ import java.util.Map;
 
 @Mapper
 public interface DatabaseMapper {
-    @Select("SHOW DATABASES")
-    List<String> getDatabases();
+    @Select("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
+    List<String> getTables();
 
-    @Select("SHOW TABLES FROM ${dbName}")
-    List<String> getTables(@Param("dbName") String dbName);
-
-    @Select("SHOW FULL COLUMNS FROM ${dbName}.${tableName}")
-    List<Map<String, Object>> getTableStruct(@Param("dbName") String dbName, @Param("tableName") String tableName);
+    @Select("select * from information_schema.columns\n" +
+            "where table_name = #{tableName};")
+    List<Map<String, Object>> getTableStruct(@Param("tableName") String tableName);
 }

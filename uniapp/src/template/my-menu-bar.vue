@@ -6,7 +6,7 @@ const showLeft = ref(),
     current = route[route.length -1].route.split('/')[1],
     menus = {
       host: "主机信息",
-      user: "用户",
+      person: "用户",
       patrol: "巡检记录",
       database: "数据库",
       console: "控制台"

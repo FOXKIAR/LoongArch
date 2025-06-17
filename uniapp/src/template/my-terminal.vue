@@ -84,7 +84,7 @@ export default {
 #terminal-container {
   float: right;
   width: 95%;
-  height: 100vh;
+  height: 100%;
   background: #1e1e1e;
 }
 </style>

@@ -11,7 +11,7 @@
 	"pages": [
 		{"path": "pages/login"},
 		{"path": "pages/host"},
-		{"path": "pages/user"},
+		{"path": "pages/person"},
 		{"path": "pages/patrol"},
 		{"path": "pages/database"},
 		{"path": "pages/console"},

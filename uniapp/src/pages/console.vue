@@ -4,6 +4,7 @@
 
 <template>
   <my-menu-bar/>
+  <my-file/>
   <my-terminal/>
 </template>
 

@@ -1,7 +1,7 @@
 # 用户接口
 ## 登录
 ### 请求信息
-+ url: /user/login
++ url: /person/login
 + method: POST
 ### 请求参数
 | 参数名      | 类型     | 必选 | 说明              |
@@ -10,7 +10,7 @@
 | password | String | 是  | 登录密码，长度要求8到16字符 |
 ### 请求示例
 ```shell
-curl -X POST 'http://localhost:8080/user/login' \
+curl -X POST 'http://localhost:8080/person/login' \
     -H 'Content-Type: application/json' \
     -d '{"account": "admin123", "password", "admin123"}'
 ```
@@ -18,7 +18,7 @@ curl -X POST 'http://localhost:8080/user/login' \
 | 键               | 值类型                                                         | 说明   |
 |-----------------|-------------------------------------------------------------|------|
 | msg             | String                                                      | 提示信息 |
-| data            | [User](src/main/java/cn/foxkiar/loongarch/entity/User.java) | 数据对象 |
+| data            | [Person](src/main/java/cn/foxkiar/loongarch/entity/Person.java) | 数据对象 |
 | data.id         | Integer                                                     | 用户ID |
 | data.name       | String                                                      | 用户名  |
 | data.account    | String                                                      | 登录账号 |
@@ -52,7 +52,7 @@ curl -X POST 'http://localhost:8080/user/login' \
 ```
 ## 添加
 ### 请求信息
-+ url: /user/append
++ url: /person/append
 + method: POST
 ### 请求参数
 <strong style="color: yellow;">注意：这个接口的参数使用List包裹。</strong>
@@ -68,7 +68,7 @@ curl -X POST 'http://localhost:8080/user/login' \
 | phone      | String | 否  | 手机号                                     |
 ### 请求示例
 ```shell
-curl -X POST 'http://localhost:8080/user/append' \
+curl -X POST 'http://localhost:8080/person/append' \
     -H 'Content-Type: application/json' \
     -d '[{"name": "管理员", "account": "admin123", "password", "admin123", "permission": 0b1111}]'
 ```
@@ -94,7 +94,7 @@ curl -X POST 'http://localhost:8080/user/append' \
 ```
 ## 删除
 ### 请求信息
-+ url: /user/delete/${id}
++ url: /person/delete/${id}
 + method: DELETE
 ### 请求参数
 <strong style="color: yellow">注意：参数在URL中传递</strong>
@@ -104,7 +104,7 @@ curl -X POST 'http://localhost:8080/user/append' \
 | id         | int    | 是  | 用户ID                                    |
 ### 请求示例
 ```shell
-curl -X DELETE 'http://localhost:8080/user/delete/10'
+curl -X DELETE 'http://localhost:8080/person/delete/10'
 ```
 ### 响应格式
 | 键    | 值类型    | 说明                   |
@@ -128,7 +128,7 @@ curl -X DELETE 'http://localhost:8080/user/delete/10'
 ```
 ## 更新
 ### 请求信息
-+ url: /user/update
++ url: /person/update
 + method: PUT
 ### 请求参数
 | 参数名        | 类型     | 必选 | 说明                                      |
@@ -141,7 +141,7 @@ curl -X DELETE 'http://localhost:8080/user/delete/10'
 | phone      | String | 是  | 手机号                                     |
 ### 请求示例
 ```shell
-curl -X PUT 'http://localhost:8080/user/update' \
+curl -X PUT 'http://localhost:8080/person/update' \
     -H 'Content-Type: application/json' \
     -d '{"id": 1, "name": "管理员", "account": "admin123", "permission": 0b1111, "email": "test@qq.com", "phone": "13333333333"}'
 ```
@@ -167,7 +167,7 @@ curl -X PUT 'http://localhost:8080/user/update' \
 ```
 ## 获取一页数据
 ### 请求信息
-+ url: /user/page/${currentPage}
++ url: /person/page/${currentPage}
 + method: GET
 ### 请求参数
 <strong style="color: yellow">注意：currentPage参数在URL中传递</strong>
@@ -182,14 +182,14 @@ curl -X PUT 'http://localhost:8080/user/update' \
 | phone       | String | 否  | 手机号，根据值模糊查询  |
 ### 请求示例
 ```shell
-curl -X GET 'http://localhost:8080/user/page/1'
+curl -X GET 'http://localhost:8080/person/page/1'
 ```
 ### 响应格式
 | 键            | 值类型          | 说明                                                                        |
 |--------------|--------------|---------------------------------------------------------------------------|
 | msg          | String       | 提示信息                                                                      |
-| data         | Page\<User\> | 数据对象                                                                      |
-| data.records | List\<User\> | 当前这一页的所有数据，[泛型详情请参阅](src/main/java/cn/foxkiar/loongarch/entity/User.java) |
+| data         | Page\<Person\> | 数据对象                                                                      |
+| data.records | List\<Person\> | 当前这一页的所有数据，[泛型详情请参阅](src/main/java/cn/foxkiar/loongarch/entity/Person.java) |
 | data.total   | int          | 总共有多少数据                                                                   |
 | data.size    | int          | 每一页有多少数据                                                                  |
 | data.current | int          | 当前页                                                                       |

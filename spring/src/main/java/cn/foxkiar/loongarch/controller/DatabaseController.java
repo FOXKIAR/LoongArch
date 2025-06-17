@@ -21,23 +21,12 @@ public class DatabaseController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Result<List<String>>> getAllDb() {
-        List<String> dbs = databaseMapper.getDatabases();
-        dbs.remove("information_schema");
-        dbs.remove("mysql");
-        dbs.remove("performance_schema");
-        dbs.remove("sys");
-        // 删除系统架构
-        return ResponseEntity.ok(Result.success(dbs));
+    public ResponseEntity<Result<List<String>>> getTables() {
+        return ResponseEntity.ok(Result.success(databaseMapper.getTables()));
     }
 
-    @GetMapping("/all/{database}")
-    public ResponseEntity<Result<List<String>>> getTables(@PathVariable String database) {
-        return ResponseEntity.ok(Result.success(databaseMapper.getTables(database)));
-    }
-
-    @GetMapping("/struct/{database}/{table}")
-    public ResponseEntity<Result<List<Map<String, Object>>>> getTables(@PathVariable String database, @PathVariable String table) {
-        return ResponseEntity.ok(Result.success(databaseMapper.getTableStruct(database, table)));
+    @GetMapping("/struct/{table}")
+    public ResponseEntity<Result<List<Map<String, Object>>>> getTables(@PathVariable String table) {
+        return ResponseEntity.ok(Result.success(databaseMapper.getTableStruct(table)));
     }
 }

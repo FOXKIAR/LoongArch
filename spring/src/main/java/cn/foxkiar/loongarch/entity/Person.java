@@ -6,17 +6,14 @@ import cn.foxkiar.loongarch.validation.Phone;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 @Data
-@TableName("loong_arch.user")
-public class User implements Serializable {
+public class Person {
     @TableId(type = IdType.AUTO)
     private Integer id;
     @NotBlank(message = "姓名不能为空", groups = {Groups.Save.class})

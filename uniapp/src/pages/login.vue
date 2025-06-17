@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { User, userRules} from "../interface/user";
+import { Person, userRules} from "../interface/person";
 import { Result, serverUrl } from "../interface/common";
 import {ref} from "vue";
 
-const user = ref(new User()),
+const user = ref(new Person()),
     messageText = ref(""),
     messageType = ref("error"),
     messageBox = ref();
 
-function login(user: User) {
+function login(user: Person) {
   // noinspection JSUnusedGlobalSymbols
   uni.request({
-    url: serverUrl + "/user/login",
+    url: serverUrl + "/person/login",
     method: "POST",
     data: user,
     success(callback) {

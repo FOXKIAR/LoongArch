@@ -1,18 +1,18 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
-import {User, Permission, userRules} from '../interface/user';
+import {Person, Permission, userRules} from '../interface/person';
 import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
 
-const userPage = ref(new Page<User>()),
-    userQueryField = ref(new User()),
-    operatedUser = ref(new User()),
+const userPage = ref(new Page<Person>()),
+    userQueryField = ref(new Person()),
+    operatedUser = ref(new Person()),
     isUpdate = ref(true),
     popup = ref();
 
 function getUserPage(current: number) {
   uni.request({
-    url: serverUrl + "/user/page/" + current,
+    url: serverUrl + "/person/page/" + current,
     method: "GET",
     data: userQueryField.value,
     success(callback) {
@@ -25,7 +25,7 @@ function getUserPage(current: number) {
 
 function remove() {
   uni.request({
-    url: serverUrl + "/user/delete/" + operatedUser.value.id,
+    url: serverUrl + "/person/delete/" + operatedUser.value.id,
     method: "DELETE",
     success() {
       getUserPage(userPage.value.current);
@@ -35,7 +35,7 @@ function remove() {
 
 function update() {
   uni.request({
-    url: serverUrl + "/user/update",
+    url: serverUrl + "/person/update",
     method: "PUT",
     data: operatedUser.value,
   } as RequestOptions);
@@ -52,9 +52,9 @@ function filterUser(filter: string | number[], column: string) {
   getUserPage(userPage.value.current);
 }
 
-function clickOptionButton(user: User, flag: boolean) {
+function clickOptionButton(person: Person, flag: boolean) {
   isUpdate.value = flag;
-  operatedUser.value = user;
+  operatedUser.value = person;
   popup.value.open();
 }
 
@@ -82,8 +82,8 @@ onLoad(() => getUserPage(1));
       </uni-forms>
     </uni-popup-dialog>
   </uni-popup>
-  <div id="user-div">
-    <uni-card id="user-card" title="用户">
+  <div id="person-div">
+    <uni-card id="person-card" title="用户">
       <uni-table id="table">
         <uni-tr>
           <uni-th width="80px">{{ "ID" }}</uni-th>
@@ -92,29 +92,27 @@ onLoad(() => getUserPage(1));
           <uni-th filter-type="search" @filter-change="filterUser($event.filter, 'phone')">{{ "手机号" }}</uni-th>
           <uni-th filter-type="search" @filter-change="filterUser($event.filter, 'email')">{{ "邮箱" }}</uni-th>
           <uni-th :filter-data="[
-                        {value: 1, text: 'GET'},
-                        {value: 2, text: 'PUT'},
-                        {value: 4, text: 'DELETE'},
-                        {value: 8, text: 'POST'}
+                        {value: 1, text: 'PUT'},
+                        {value: 2, text: 'DELETE'},
+                        {value: 4, text: 'POST'}
                     ]" filter-type="select"
                   @filter-change="filterUser($event.filter, 'permission')">{{ "权限" }}</uni-th>
           <uni-th>{{ "操作" }}</uni-th>
         </uni-tr>
-        <uni-tr v-for="user in (userPage.records as User[])">
-          <uni-td>{{ user.id }}</uni-td>
-          <uni-td>{{ user.name }}</uni-td>
-          <uni-td>{{ user.account }}</uni-td>
-          <uni-td>{{ user.phone }}</uni-td>
-          <uni-td>{{ user.email }}</uni-td>
+        <uni-tr v-for="person in (userPage.records as Person[])">
+          <uni-td>{{ person.id }}</uni-td>
+          <uni-td>{{ person.name }}</uni-td>
+          <uni-td>{{ person.account }}</uni-td>
+          <uni-td>{{ person.phone }}</uni-td>
+          <uni-td>{{ person.email }}</uni-td>
           <uni-td>
-            <uni-tag :inverted="!Boolean((user.permission ?? 0) & Permission.POST)" class="tag" text="POST" type="royal"/>
-            <uni-tag :inverted="!Boolean((user.permission ?? 0) & Permission.DELETE)" class="tag" text="DELETE" type="error"/>
-            <uni-tag :inverted="!Boolean((user.permission ?? 0) & Permission.PUT)" class="tag" text="PUT" type="primary"/>
-            <uni-tag :inverted="!Boolean((user.permission ?? 0) & Permission.GET)" class="tag" text="GET" type="success"/>
+            <uni-tag :inverted="!Boolean((person.permission ?? 0) & Permission.POST)" class="tag" text="POST" type="success"/>
+            <uni-tag :inverted="!Boolean((person.permission ?? 0) & Permission.DELETE)" class="tag" text="DELETE" type="error"/>
+            <uni-tag :inverted="!Boolean((person.permission ?? 0) & Permission.PUT)" class="tag" text="PUT" type="primary"/>
           </uni-td>
           <uni-td>
-            <uni-tag @click=clickOptionButton(user,true) class="option" text="修改" type="primary"/>
-            <uni-tag @click=clickOptionButton(user,false) class="option" text="删除" type="error"/>
+            <uni-tag @click=clickOptionButton(person,true) class="option" text="修改" type="primary"/>
+            <uni-tag @click=clickOptionButton(person,false) class="option" text="删除" type="error"/>
           </uni-td>
         </uni-tr>
       </uni-table>
@@ -124,11 +122,11 @@ onLoad(() => getUserPage(1));
 </template>
 
 <style lang="scss" scoped>
-#user-div {
+#person-div {
   float: right;
   width: 95vw;
 
-  #user-card {
+  #person-card {
     height: 90vh;
 
     #table {

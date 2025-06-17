@@ -1,7 +1,7 @@
 package cn.foxkiar.loongarch.controller;
 
 import cn.foxkiar.loongarch.entity.Patrol;
-import cn.foxkiar.loongarch.entity.User;
+import cn.foxkiar.loongarch.entity.Person;
 import cn.foxkiar.loongarch.mapper.PatrolMapper;
 import cn.foxkiar.loongarch.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -25,9 +25,9 @@ public class PatrolController {
 
     @PostMapping("/append")
     public ResponseEntity<Result<?>> append(@RequestBody Patrol patrol,  HttpSession session) {
-        User currentUser = (User) session.getAttribute("LOGIN_USER");
-        patrol.setUserId(currentUser.getId());
-        patrol.setUserName(currentUser.getName());
+        Person currentPerson = (Person) session.getAttribute("LOGIN_USER");
+        patrol.setPersonId(currentPerson.getId());
+        patrol.setPersonName(currentPerson.getName());
         patrol.setRecordDate(new Date());
         return patrolMapper.insert(patrol) != 0 ?
                 ResponseEntity.ok(Result.success(null)) :
@@ -40,8 +40,8 @@ public class PatrolController {
         LambdaQueryWrapper<Patrol> wrapper = new LambdaQueryWrapper<>();
         if (patrol.getStartDate() != null) wrapper.ge(Patrol::getRecordDate, new Date(patrol.getStartDate()));
         if (patrol.getEndDate() != null) wrapper.le(Patrol::getRecordDate, new Date(patrol.getEndDate()));
-        if (patrol.getUserId() != null) wrapper.eq(Patrol::getUserId, patrol.getUserId());
-        if (patrol.getUserName() != null) wrapper.like(Patrol::getUserName, patrol.getUserName());
+        if (patrol.getPersonId() != null) wrapper.eq(Patrol::getPersonId, patrol.getPersonId());
+        if (patrol.getPersonName() != null) wrapper.like(Patrol::getPersonName, patrol.getPersonName());
         if (patrol.getIsNormal() != null) wrapper.eq(Patrol::getIsNormal, patrol.getIsNormal());
         if (patrol.getComment() != null) wrapper.like(Patrol::getComment, patrol.getComment());
         return ResponseEntity.ok(Result.success(patrolMapper.selectPage(new Page<>(currentPage, 10), wrapper)));

@@ -83,11 +83,18 @@
             <version>3.5.10.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.opengauss/opengauss-jdbc -->
+<!--        <dependency>-->
+<!--            <groupId>org.opengauss</groupId>-->
+<!--            <artifactId>opengauss-jdbc</artifactId>-->
+<!--            <version>5.1.0</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>org.opengauss</groupId>
-            <artifactId>opengauss-jdbc</artifactId>
-            <version>5.1.0</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
