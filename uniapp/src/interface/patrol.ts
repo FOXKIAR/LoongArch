@@ -1,7 +1,7 @@
 export class Patrol {
     recordDate: Date;
-    userId: number;
-    userName: string;
+    personId: number;
+    personName: string;
     isNormal: boolean;
     comment: string;
     startDate: Date;

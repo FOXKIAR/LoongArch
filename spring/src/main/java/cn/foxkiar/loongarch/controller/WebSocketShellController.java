@@ -11,8 +11,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-// 使用 @ServerEndpoint 注解表示此类是一个 WebSocket 端点
-// 通过 value 注解，指定 websocket 的路径
 @Log4j2
 @Component
 @ServerEndpoint(value = "/websocket/shell")

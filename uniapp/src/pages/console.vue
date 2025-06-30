@@ -4,10 +4,15 @@
 
 <template>
   <my-menu-bar/>
-  <my-file/>
-  <my-terminal/>
+  <div id="console-div">
+    <my-file/>
+    <my-terminal/>
+  </div>
 </template>
 
 <style scoped>
-
+#console-div {
+  float: right;
+  width: 95vw;
+}
 </style>

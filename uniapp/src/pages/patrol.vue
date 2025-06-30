@@ -81,7 +81,7 @@ onLoad(() => getPatrolPage(1));
         </uni-tr>
         <uni-tr v-for="patrol in (patrolPage.records as Patrol[])">
           <uni-td>{{ formatDate(new Date(patrol.recordDate), "yyyy/MM/dd") }}</uni-td>
-          <uni-td>{{ patrol.userName }}</uni-td>
+          <uni-td>{{ patrol.personName }}</uni-td>
           <uni-td>{{ patrol.isNormal ? '是' : '否' }}</uni-td>
           <uni-td>{{ patrol.comment }}</uni-td>
         </uni-tr>

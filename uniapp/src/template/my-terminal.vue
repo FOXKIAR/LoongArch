@@ -83,8 +83,8 @@ export default {
 <style scoped>
 #terminal-container {
   float: right;
-  width: 95%;
-  height: 100%;
+  width: 80%;
+  height: 100vh;
   background: #1e1e1e;
 }
 </style>
