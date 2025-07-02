@@ -13,8 +13,7 @@
 		{"path": "pages/host"},
 		{"path": "pages/person"},
 		{"path": "pages/patrol"},
-		{"path": "pages/database"},
-		{"path": "pages/console"},
+		{"path": "pages/console"}
 	],
 	"globalStyle": {
 		"titleNView": false,

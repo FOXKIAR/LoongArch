@@ -12,7 +12,7 @@ export function formatSize(size: number, unit: string = null) {
         return {size: Number((size / sizeUnit[unit]).toFixed(2)), unit};
     for (let current in sizeUnit) {
         if (size > sizeUnit[current])
-            return {size: Number((size / sizeUnit[current]).toFixed(2)), current};
+            return {size: Number((size / sizeUnit[current]).toFixed(2)), unit: current};
     }
     return {size: size, unit: "B"};
 }

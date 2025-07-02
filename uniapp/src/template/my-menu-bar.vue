@@ -8,7 +8,6 @@ const showLeft = ref(),
       host: "主机信息",
       person: "用户",
       patrol: "巡检记录",
-      database: "数据库",
       console: "控制台"
     }
 

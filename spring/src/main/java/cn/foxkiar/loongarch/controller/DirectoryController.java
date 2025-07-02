@@ -28,7 +28,7 @@ public class DirectoryController {
     // 先使用 wsl 驱动器测试
     @GetMapping
     public ResponseEntity<Result<List<FileInfo>>> directory(String path) {
-        File[] files = new File("//wsl.localhost/kali-linux" + path).listFiles();
+        File[] files = new File("//wsl.localhost/kali-linux/" + path).listFiles();
         if (files == null)
             return ResponseEntity.noContent().build();
         List<FileInfo> list = Arrays.stream(files).map(file -> {
