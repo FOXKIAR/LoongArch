@@ -6,15 +6,18 @@ import {onLoad} from "@dcloudio/uni-app";
 import {formatSize} from "../util/sizeUtil";
 
 const files = ref(new Array<FileInfo>()),
-    path = ref("");
+    paths = ref(new Array<string>());
 
-function getFiles(fileName: string) {
-  path.value += fileName;
+function getFiles(file: FileInfo) {
+  if (!file.isDirectory)
+    return
+  if (file.name != null)
+    paths.value.push(file.name)
   uni.request({
     url: serverUrl + "/directory",
     method: "GET",
     data: {
-      path: path.value
+      path: toPath(paths.value)
     },
     success(callback) {
       const result: Result = callback.data as any;
@@ -24,6 +27,11 @@ function getFiles(fileName: string) {
   } as RequestOptions);
 }
 
+function goto(index: number) {
+  paths.value.splice(index + 1);
+  getFiles(new FileInfo(null, true, null));
+}
+
 function sizeToString(size: number | null) {
   if (size == null)
     return null;
@@ -31,20 +39,30 @@ function sizeToString(size: number | null) {
   return result.size + result.unit;
 }
 
+function toPath(arr: Array<string>) {
+  let result = '/';
+  arr.forEach(item => result += item + '/');
+  return result
+}
+
 // 加载完成后获取根目录文件集
-onLoad(() => getFiles("/home/"));
+onLoad(() => getFiles(new FileInfo('home', true, null)));
 </script>
 
 <template>
   <div id="file-box">
-    <uni-easyinput id="input" v-model="path" type="text"/>
+    <uni-breadcrumb separator="/">
+      <uni-breadcrumb-item v-for="(path, index) in paths" :key="index" @click="goto(index)">
+        {{path}}
+      </uni-breadcrumb-item>
+    </uni-breadcrumb>
     <uni-list>
       <uni-list-item clickable
           v-for="file in files"
           :disabled=!file.isDirectory
           :title=file.name
           :rightText=sizeToString(file.size)
-          @dblclick="getFiles(file.name + '/')"
+          @dblclick="getFiles(file)"
       />
     </uni-list>
   </div>
