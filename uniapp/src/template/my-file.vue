@@ -8,11 +8,22 @@ import {formatSize} from "../util/sizeUtil";
 const files = ref(new Array<FileInfo>()),
     paths = ref(new Array<string>());
 
-function getFiles(file: FileInfo) {
-  if (!file.isDirectory)
-    return
-  if (file.name != null)
-    paths.value.push(file.name)
+function doubleClickFile(file: FileInfo) {
+  if (file.isDirectory)
+    gotoDirectory(file.name, null);
+  else
+    download(toPath(paths.value) + file.name);
+}
+
+function download(path: string) {
+  location.href = serverUrl + "/directory/download?path=" + path;
+}
+
+function gotoDirectory(fileName: string, index: number) {
+  if (fileName == null)
+    paths.value.splice(index + 1);
+  else
+    paths.value.push(fileName);
   uni.request({
     url: serverUrl + "/directory",
     method: "GET",
@@ -25,11 +36,6 @@ function getFiles(file: FileInfo) {
         files.value = result.data;
     }
   } as RequestOptions);
-}
-
-function goto(index: number) {
-  paths.value.splice(index + 1);
-  getFiles(new FileInfo(null, true, null));
 }
 
 function sizeToString(size: number | null) {
@@ -46,23 +52,22 @@ function toPath(arr: Array<string>) {
 }
 
 // 加载完成后获取根目录文件集
-onLoad(() => getFiles(new FileInfo('home', true, null)));
+onLoad(() => gotoDirectory('', null));
 </script>
 
 <template>
   <div id="file-box">
     <uni-breadcrumb separator="/">
-      <uni-breadcrumb-item v-for="(path, index) in paths" :key="index" @click="goto(index)">
-        {{path}}
+      <uni-breadcrumb-item v-for="(path, index) in paths" :key="index" @click="gotoDirectory(null, index)">
+        {{ path }}
       </uni-breadcrumb-item>
     </uni-breadcrumb>
     <uni-list>
       <uni-list-item clickable
           v-for="file in files"
-          :disabled=!file.isDirectory
           :title=file.name
           :rightText=sizeToString(file.size)
-          @dblclick="getFiles(file)"
+          @dblclick="doubleClickFile(file)"
       />
     </uni-list>
   </div>
