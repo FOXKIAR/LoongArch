@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { Person, userRules} from "../interface/person";
+import { Person } from "../interface/person";
 import { Result, serverUrl } from "../interface/common";
-import {ref} from "vue";
+import { ref } from "vue";
 
 const user = ref(new Person()),
     messageText = ref(""),
@@ -9,27 +9,22 @@ const user = ref(new Person()),
     messageBox = ref();
 
 function login(user: Person) {
-  // noinspection JSUnusedGlobalSymbols
   uni.request({
     url: serverUrl + "/person/login",
     method: "POST",
     data: user,
     success(callback) {
-      const result = callback.data as Result;
+      const result: Result = callback.data;
       messageText.value = result.msg;
       if (callback.statusCode == 200) {
         messageType.value = "success";
         uni.setStorageSync("me", result.data);
         // 延迟 2.5 秒后跳转到主页
-        setTimeout(() => uni.redirectTo({url: "/pages/host"}), 2500);
+        setTimeout(() => uni.redirectTo({url: "/pages/host"}), 1500);
       }
     },
-    fail() {
-      messageText.value = "网络连接失败";
-    },
-    complete() {
-      messageBox.value?.open();
-    }
+    fail() { messageText.value = "网络连接失败"; },
+    complete() { messageBox.value?.open(); }
   } as RequestOptions);
 }
 </script>

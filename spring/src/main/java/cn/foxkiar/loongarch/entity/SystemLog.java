@@ -10,11 +10,11 @@ import java.sql.Time;
 public class SystemLog {
     @TableId(type = IdType.INPUT)
     private Time occurrence_time;
-    private Level level;
+    private LevelEnum level;
     private String message;
     private String reason;
 }
 
-enum Level {
+enum LevelEnum {
     INFO, WARN, ERROR
 }

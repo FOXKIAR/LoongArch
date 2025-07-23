@@ -6,6 +6,7 @@ import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 import {formatTime} from "../util/timeUtil";
 import {formatDate, friendlyDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
 import {formatSize} from "../util/sizeUtil";
+import MyMenuBar from "../template/my-menu-bar.vue";
 
 const hostInfo = ref(new HostInfo()),
     networkAreas = ref([]),
@@ -148,11 +149,11 @@ onLoad(() => {
                   case "uptime": return "运行时长";
                 }
             })(key) }}</uni-td>
-            <uni-td>{{ (() => {
-              if (typeof value == "number")
-                  return formatTime(value * 1000);
-              return value;
-            })() }}</uni-td>
+            <uni-td>{{ ((data) => {
+              if (typeof data == "number")
+                  return formatTime(data * 1000);
+              return data;
+            })(value) }}</uni-td>
           </uni-tr>
         </uni-table>
       </uni-card>

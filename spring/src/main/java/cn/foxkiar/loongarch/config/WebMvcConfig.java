@@ -1,7 +1,7 @@
 package cn.foxkiar.loongarch.config;
 
 import cn.foxkiar.loongarch.interceptor.GlobalInterceptor;
-import cn.foxkiar.loongarch.mapper.RequestLogMapper;
+import cn.foxkiar.loongarch.mapper.OperationLogMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -9,10 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    final RequestLogMapper requestLogMapper;
+    final OperationLogMapper operationLogMapper;
 
-    public WebMvcConfig(RequestLogMapper requestLogMapper) {
-        this.requestLogMapper = requestLogMapper;
+    public WebMvcConfig(OperationLogMapper operationLogMapper) {
+        this.operationLogMapper = operationLogMapper;
     }
 
     @Override
@@ -28,6 +28,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new GlobalInterceptor(requestLogMapper)).addPathPatterns("/**");
+        registry.addInterceptor(new GlobalInterceptor(operationLogMapper)).
+                addPathPatterns("/directory/**").
+                addPathPatterns("/host/**").
+                addPathPatterns("/log/**").
+                addPathPatterns("/patrol/**").
+                addPathPatterns("/person/**").
+                addPathPatterns("/websocket/**");
     }
 }
