@@ -20,27 +20,18 @@ public class GlobalInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         HttpSession session = request.getSession(false);
         Person currentPerson =  session == null ? null : (Person) session.getAttribute("LOGIN_USER");
+        Integer userId = currentPerson == null ? null : currentPerson.getId();
+        String username = currentPerson == null ? null : currentPerson.getName();
         OperationLog operationLog;
-        if (currentPerson != null)
-            operationLog = new OperationLog(
-                    null,
-                    null,
-                    currentPerson.getId(),
-                    currentPerson.getName(),
-                    request.getRequestURI(),
-                    request.getMethod(),
-                    response.getStatus() == 200
-            );
-        else
-            operationLog = new OperationLog(
-                    null,
-                    null,
-                    null,
-                    null,
-                    request.getRequestURI(),
-                    request.getMethod(),
-                    response.getStatus() == 200
-            );
+        operationLog = new OperationLog(
+                null,
+                null,
+                userId,
+                username,
+                request.getRequestURI(),
+                request.getMethod(),
+                response.getStatus() == 200
+        );
         requestLogMapper.insert(operationLog);
     }
 }

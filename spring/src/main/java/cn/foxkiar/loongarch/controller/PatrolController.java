@@ -44,6 +44,7 @@ public class PatrolController {
         if (patrol.getPersonName() != null) wrapper.like(Patrol::getPersonName, patrol.getPersonName());
         if (patrol.getIsNormal() != null) wrapper.eq(Patrol::getIsNormal, patrol.getIsNormal());
         if (patrol.getComment() != null) wrapper.like(Patrol::getComment, patrol.getComment());
+        wrapper.orderByAsc(Patrol::getRecordDate);
         return ResponseEntity.ok(Result.success(patrolMapper.selectPage(new Page<>(currentPage, 10), wrapper)));
     }
 }

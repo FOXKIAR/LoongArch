@@ -13,9 +13,9 @@ import java.sql.Timestamp;
 public class OperationLog {
     @TableId(type = IdType.AUTO)
     public Long id;
-    public Timestamp completion_time;
-    public Integer operator_id;
-    public String operator_name;
+    public Timestamp completionTime;
+    public Integer operatorId;
+    public String operatorName;
     public String module;
     public String operate;
     public Boolean result;

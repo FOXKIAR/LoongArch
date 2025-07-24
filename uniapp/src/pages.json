@@ -13,6 +13,7 @@
 		{"path": "pages/host"},
 		{"path": "pages/person"},
 		{"path": "pages/patrol"},
+		{"path": "pages/log"},
 		{"path": "pages/console"}
 	],
 	"globalStyle": {
