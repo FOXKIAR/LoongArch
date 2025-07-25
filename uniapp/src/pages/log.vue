@@ -4,6 +4,7 @@ import {OperationLog} from "../interface/log";
 import {Page, Result, serverUrl} from "../interface/common";
 import {ref} from "vue";
 import {onLoad} from "@dcloudio/uni-app";
+import MyMenuBar from "../template/my-menu-bar.vue";
 
 const logPage = ref(new Page<OperationLog>());
 
@@ -48,5 +49,16 @@ onLoad(() => getLogPage(1));
 </template>
 
 <style scoped lang="scss">
+#log-div {
+  float: right;
+  width: 95vw;
 
+  #log-card {
+    height: 90vh;
+
+    #table {
+      height: 70vh;
+    }
+  }
+}
 </style>

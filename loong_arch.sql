@@ -41,34 +41,14 @@ COMMENT ON COLUMN patrol.is_normal IS '设备是否正常运行';
 COMMENT ON COLUMN patrol.comment IS '设备非正常运行时的备注';
 
 
-CREATE TABLE request_log(
-    occurrence_time TIME PRIMARY KEY DEFAULT CURRENT_TIME,
-    method VARCHAR(8) NOT NULL,
-    path VARCHAR(16) NOT NULL,
-    response VARCHAR(8) NOT NULL,
-    failure_reason VARCHAR(16) NOT NULL
+CREATE TABLE operation_log(
+    id SERIAL PRIMARY KEY,
+    completion_time TIMESTAMP DEFAULT current_timestamp,
+    operator_id INT,
+    operator_name VARCHAR(8),
+    module VARCHAR(32),
+    operate VARCHAR(8),
+    result boolean
 );
-
-COMMENT ON TABLE request_log IS '请求日志';
-COMMENT ON COLUMN request_log.occurrence_time IS '发生时间';
-COMMENT ON COLUMN request_log.method IS '请求方式';
-COMMENT ON COLUMN request_log.path IS '接口路径';
-COMMENT ON COLUMN request_log.response IS '响应结果';
-COMMENT ON COLUMN request_log.failure_reason IS '失败原因';
-
-
-CREATE TABLE system_log(
-    occurrence_time TIME PRIMARY KEY DEFAULT CURRENT_TIME,
-    level VARCHAR(8) NOT NULL,
-    message VARCHAR(256) NOT NULL,
-    reason VARCHAR(16) NOT NULL
-);
-
-COMMENT ON TABLE system_log IS '系统日志';
-COMMENT ON COLUMN system_log.occurrence_time IS '发生时间';
-COMMENT ON COLUMN system_log.level IS '级别';
-COMMENT ON COLUMN system_log.message IS '日志信息';
-COMMENT ON COLUMN system_log.reason IS '可能是什么原因导致的';
-
 
 

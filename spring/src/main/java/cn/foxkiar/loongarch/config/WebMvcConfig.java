@@ -1,6 +1,8 @@
 package cn.foxkiar.loongarch.config;
 
+import cn.foxkiar.loongarch.interceptor.AuthenticationInterceptor;
 import cn.foxkiar.loongarch.interceptor.GlobalInterceptor;
+import cn.foxkiar.loongarch.interceptor.PermissionInterceptor;
 import cn.foxkiar.loongarch.mapper.OperationLogMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -29,11 +31,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new GlobalInterceptor(operationLogMapper)).
-                addPathPatterns("/directory/**").
-                addPathPatterns("/host/**").
-                addPathPatterns("/log/**").
-                addPathPatterns("/patrol/**").
-                addPathPatterns("/person/**").
-                addPathPatterns("/websocket/**");
+                addPathPatterns(
+                        "/directory/**",
+                        "/host/**",
+                        "/log/**",
+                        "/patrol/**",
+                        "/person/**"
+                );
+        registry.addInterceptor(new AuthenticationInterceptor()).
+                excludePathPatterns("/person/login");
+        registry.addInterceptor(new PermissionInterceptor()).
+                excludePathPatterns("/person/login");
     }
 }

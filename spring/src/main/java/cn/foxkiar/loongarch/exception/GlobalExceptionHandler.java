@@ -22,9 +22,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(message("错误的请求或参数格式"));
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Result<Exception>> authenticationFail() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message("身份令牌失效"));
+    }
+
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<Result<Exception>> databaseConnectError(SQLException e) {
-        log.error(e.getMessage());
+    public ResponseEntity<Result<Exception>> databaseConnectError() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message("数据库连接失败"));
     }
 }
