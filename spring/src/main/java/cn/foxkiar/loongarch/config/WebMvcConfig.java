@@ -1,6 +1,5 @@
 package cn.foxkiar.loongarch.config;
 
-import cn.foxkiar.loongarch.interceptor.AuthenticationInterceptor;
 import cn.foxkiar.loongarch.interceptor.GlobalInterceptor;
 import cn.foxkiar.loongarch.interceptor.PermissionInterceptor;
 import cn.foxkiar.loongarch.mapper.OperationLogMapper;
@@ -38,8 +37,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/patrol/**",
                         "/person/**"
                 );
-        registry.addInterceptor(new AuthenticationInterceptor()).
-                excludePathPatterns("/person/login");
         registry.addInterceptor(new PermissionInterceptor()).
                 excludePathPatterns("/person/login");
     }

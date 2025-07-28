@@ -20,10 +20,16 @@ public class LogController {
         this.operationLogMapper = operationLogMapper;
     }
 
-    @GetMapping("/operation/page/{currentPage}")
-    public ResponseEntity<Result<Page<OperationLog>>> getOperationLog(@PathVariable int currentPage) {
+    @GetMapping("/page/{currentPage}")
+    public ResponseEntity<Result<Page<OperationLog>>> page(@PathVariable("currentPage") int currentPage) {
         LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByAsc(OperationLog::getId);
+        wrapper.orderByDesc(OperationLog::getId);
         return ResponseEntity.ok(Result.success(operationLogMapper.selectPage(new Page<>(currentPage, 10), wrapper)));
     }
 }
+
+
+
+
+
+

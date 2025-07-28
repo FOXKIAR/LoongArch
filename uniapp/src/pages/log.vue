@@ -10,7 +10,7 @@ const logPage = ref(new Page<OperationLog>());
 
 function getLogPage(current: number) {
   uni.request({
-    url: serverUrl + "/log/operation/page/" + current,
+    url: serverUrl + "/log/page/" + current,
     method: "GET",
     success(callback) {
       const result: Result = callback.data as any;

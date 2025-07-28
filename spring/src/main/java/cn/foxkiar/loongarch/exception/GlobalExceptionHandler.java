@@ -23,8 +23,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Result<Exception>> authenticationFail() {
+    public ResponseEntity<Result<Exception>> authenticationFailed() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message("身份令牌失效"));
+    }
+
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<Result<Exception>> permissionDenied() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message("你没有权限"));
     }
 
     @ExceptionHandler(SQLException.class)
