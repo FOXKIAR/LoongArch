@@ -4,10 +4,14 @@ import {ref} from "vue";
 import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
 import {formatDate} from "@dcloudio/uni-ui/lib/uni-dateformat/date-format";
+import MyMenuBar from "../template/my-menu-bar.vue";
 
 const patrolPage = ref(new Page<Patrol>()),
     patrol = ref(new Patrol()),
     insertPatrol = ref(new Patrol()),
+    messageText = ref(""),
+    messageType = ref(""),
+    messageBox = ref(),
     popup = ref();
 
 function getPatrolPage(current: number) {
@@ -42,8 +46,16 @@ function addPatrol() {
     url: serverUrl + "/patrol/append",
     method: "POST",
     data: insertPatrol.value,
+    success(callback) {
+      messageType.value = callback.statusCode == 200 ? "success" : "warn";
+      messageText.value = callback.data?.msg || "服务器错误";
+      if (callback.statusCode == 200)
+        getPatrolPage(patrolPage.value.current);
+      else if(callback.statusCode == 401)
+        setTimeout(() => uni.redirectTo({url: "/"}), 1500);
+    },
+    complete() { messageBox.value?.open(); }
   } as RequestOptions);
-  getPatrolPage(patrolPage.value.current);
 }
 
 // 加载完成后获取第一页用户列表
@@ -64,6 +76,10 @@ onLoad(() => getPatrolPage(1));
         <uni-easyinput v-model=insertPatrol.comment type="textarea"/>
       </uni-forms>
     </uni-popup-dialog>
+  </uni-popup>
+
+  <uni-popup ref="messageBox" type="message">
+    <uni-popup-message :message=messageText :type=messageType is/>
   </uni-popup>
 
   <div id="patrol-div">

@@ -3,11 +3,15 @@ import {ref} from 'vue';
 import {Person, Permission, userRules} from '../interface/person';
 import {Page, Result, serverUrl} from "../interface/common";
 import {onLoad} from "@dcloudio/uni-app";
+import MyMenuBar from "../template/my-menu-bar.vue";
 
 const userPage = ref(new Page<Person>()),
     userQueryField = ref(new Person()),
     operatedUser = ref(new Person()),
     isUpdate = ref(true),
+    messageText = ref(""),
+    messageType = ref(""),
+    messageBox = ref(),
     popup = ref();
 
 function getUserPage(current: number) {
@@ -27,9 +31,15 @@ function remove() {
   uni.request({
     url: serverUrl + "/person/delete/" + operatedUser.value.id,
     method: "DELETE",
-    success() {
-      getUserPage(userPage.value.current);
-    }
+    success(callback) {
+      messageType.value = callback.statusCode == 200 ? "success" : "warn";
+      messageText.value = callback.data?.msg || "服务器错误";
+      if (callback.statusCode == 200)
+          getUserPage(userPage.value.current);
+      else if(callback.statusCode == 401)
+          setTimeout(() => uni.redirectTo({url: "/"}), 1500);
+    },
+    complete() { messageBox.value?.open(); }
   } as RequestOptions);
 }
 
@@ -38,6 +48,16 @@ function update() {
     url: serverUrl + "/person/update",
     method: "PUT",
     data: operatedUser.value,
+    success(callback) {
+      messageType.value = callback.statusCode == 200 ? "success" : "warn";
+      messageText.value = callback.data?.msg || "服务器错误";
+      if (callback.statusCode == 200)
+        getUserPage(userPage.value.current);
+      else if(callback.statusCode == 401) {
+        setTimeout(() => uni.redirectTo({url: "/"}), 1500);
+      }
+    },
+    complete() { messageBox.value?.open(); }
   } as RequestOptions);
 }
 
@@ -82,6 +102,11 @@ onLoad(() => getUserPage(1));
       </uni-forms>
     </uni-popup-dialog>
   </uni-popup>
+
+  <uni-popup ref="messageBox" type="message">
+    <uni-popup-message :message=messageText :type=messageType is/>
+  </uni-popup>
+
   <div id="person-div">
     <uni-card id="person-card" title="用户">
       <uni-table id="table">

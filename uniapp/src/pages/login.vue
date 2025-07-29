@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Person } from "../interface/person";
+import {Person, userRules} from "../interface/person";
 import { Result, serverUrl } from "../interface/common";
 import { ref } from "vue";
 
@@ -23,7 +23,6 @@ function login(user: Person) {
         setTimeout(() => uni.redirectTo({url: "/pages/host"}), 1500);
       }
     },
-    fail() { messageText.value = "网络连接失败"; },
     complete() { messageBox.value?.open(); }
   } as RequestOptions);
 }
