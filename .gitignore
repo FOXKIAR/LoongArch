@@ -1,6 +1,8 @@
-.idea
-uniapp/node_modules
-uniapp/package-lock.json
-uniapp/dist
-spring/target
-spring/src/main/resources/static
+# 默认忽略的文件
+/shelf/
+/.idea/
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
