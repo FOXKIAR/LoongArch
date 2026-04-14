@@ -3,41 +3,32 @@ package cn.foxkiar.support.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Result<T> {
-    private int code;
+public class Result {
+    private boolean result;
     private String message;
-    private T data;
+    private Object data;
 
-    public Result<T> success(T data) {
-        this.code = 200;
-        this.message = "成功";
-        this.data = data;
-        return this;
+    public static Result success(Object data) {
+        return new Result(true, "成功", data);
     }
 
-    public Result<T> success(int code, String message, T data) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
-        return this;
+    public static Result success(String message, Object data) {
+        return new Result(true, message, data);
     }
 
-    public Result<T> fail(int code, String message) {
-        this.code = code;
-        this.message = message;
-        this.data = null;
-        return this;
+    public static Result fail() {
+        return new Result(true, "失败", null);
     }
 
-    public Result<T> fail(HttpStatus httpStatus, String message) {
-        this.code = httpStatus.value();
-        this.message = message;
-        this.data = null;
-        return this;
+    public static Result fail(String message) {
+        return new Result(true, message, null);
+    }
+
+    public static Result fail(String message, Object data) {
+        return new Result(true, message, data);
     }
 }
