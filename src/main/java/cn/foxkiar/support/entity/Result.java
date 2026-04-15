@@ -21,14 +21,14 @@ public class Result {
     }
 
     public static Result fail() {
-        return new Result(true, "失败", null);
+        return new Result(false, "失败", null);
     }
 
     public static Result fail(String message) {
-        return new Result(true, message, null);
+        return new Result(false, message, null);
     }
 
     public static Result fail(String message, Object data) {
-        return new Result(true, message, data);
+        return new Result(false, message, data);
     }
 }
