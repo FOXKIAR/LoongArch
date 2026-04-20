@@ -31,4 +31,12 @@ public class Result {
     public static Result fail(String message, Object data) {
         return new Result(false, message, data);
     }
+
+    public String toJsonString() {
+        return "{" +
+                "\"result\":" + this.result + "," +
+                "\"message\":\"" + this.message + "\"," +
+                "\"data\":" + this.data +
+                "}";
+    }
 }
