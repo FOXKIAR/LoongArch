@@ -19,7 +19,7 @@ public class JwtUtil {
         if (user.getIsKeepLogged() != null && user.getIsKeepLogged())
             instance.add(Calendar.MONTH, 1);
         else
-            instance.add(Calendar.SECOND, 8);
+            instance.add(Calendar.HOUR_OF_DAY, 8);
         JWTCreator.Builder builder = JWT.create();
         builder.withClaim("logged", map(user));
         return builder.withExpiresAt(instance.getTime())

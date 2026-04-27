@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result {
-    private boolean result;
+    private boolean status;
     private String message;
     private Object data;
 
@@ -34,7 +34,7 @@ public class Result {
 
     public String toJsonString() {
         return "{" +
-                "\"result\":" + this.result + "," +
+                "\"result\":" + this.status + "," +
                 "\"message\":\"" + this.message + "\"," +
                 "\"data\":" + this.data +
                 "}";
