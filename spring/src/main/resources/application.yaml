@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.25.163.253:5432/loong_arch
+    username: postgres
+    password: woaini1314@!&
